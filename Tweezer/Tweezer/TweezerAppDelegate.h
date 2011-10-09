@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <RestKit/RestKit.h>
+#import "TWZListsViewController.h"
 
 @class TweezerViewController;
 
@@ -15,6 +16,6 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (strong, nonatomic) TweezerViewController *viewController;
+@property (strong, nonatomic) UINavigationController *navigationController;
 
 @end

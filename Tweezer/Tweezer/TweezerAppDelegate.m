@@ -7,20 +7,67 @@
 //
 
 #import "TweezerAppDelegate.h"
-
-#import "TweezerViewController.h"
+#import "TWZStatus.h"
+#import "TWZUser.h"
+#import "TWZList.h"
 
 @implementation TweezerAppDelegate
 
 @synthesize window = _window;
-@synthesize viewController = _viewController;
+@synthesize navigationController = _navigationController;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
+    // Initialize RestKit
+	RKObjectManager* objectManager = [RKObjectManager objectManagerWithBaseURL:@"http://twitter.com"];
+    
+    // Enable automatic network activity indicator management
+    objectManager.client.requestQueue.showsNetworkActivityIndicatorWhenBusy = YES;
+    
+    // OAuth setup
+    objectManager.client.baseURL = @"http://www.driftinglight.com";
+    objectManager.client.OAuth1ConsumerKey = @"iDXS8ft8ygFp85V4U0DQ";
+    objectManager.client.OAuth1ConsumerSecret = @"tUG3YGMMJZ4nS0aNORVxvKRtl0JkC9FEMXAjc55gKSI";
+    objectManager.client.OAuth1AccessToken = @"41256728-v97mfbMcWuj26fWRN5dCEKJZ27d5BBRuESrxERQ1Q";
+    objectManager.client.OAuth1AccessTokenSecret = @"m9fW6ordiH89ksNwG5nWwYVoYCVVtoiaQXKFHShSSo";
+    objectManager.client.authenticationType = RKRequestAuthenticationTypeOAuth1;
+    
+    // Setup our object mappings
+    RKObjectMapping* userMapping = [RKObjectMapping mappingForClass:[TWZUser class]];
+    [userMapping mapKeyPath:@"id" toAttribute:@"userID"];
+    [userMapping mapKeyPath:@"screen_name" toAttribute:@"screenName"];
+    [userMapping mapAttributes:@"name", nil];
+    
+    RKObjectMapping* statusMapping = [RKObjectMapping mappingForClass:[TWZStatus class]];
+    [statusMapping mapKeyPathsToAttributes:@"id", @"statusID",
+     @"created_at", @"createdAt",
+     @"text", @"text",
+     @"url", @"urlString",
+     @"in_reply_to_screen_name", @"inReplyToScreenName",
+     @"favorited", @"isFavorited",
+     nil];
+    [statusMapping mapRelationship:@"user" withMapping:userMapping];
+    
+    RKObjectMapping* listMapping = [RKObjectMapping mappingForClass:[TWZList class]];
+    [listMapping mapKeyPathsToAttributes:@"id", @"listID",
+     @"name", @"name",
+     nil];
+    
+    // Update date format so that we can parse Twitter dates properly
+	// Wed Sep 29 15:31:08 +0000 2010
+    [RKObjectMapping addDefaultDateFormatterForString:@"E MMM d HH:mm:ss Z y" inTimeZone:nil];
+    
+    // Register our mappings with the provider
+    [objectManager.mappingProvider setMapping:userMapping forKeyPath:@"user"];
+    [objectManager.mappingProvider setMapping:statusMapping forKeyPath:@"status"];
+    [objectManager.mappingProvider setMapping:listMapping forKeyPath:@"list"];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    self.viewController = [[TweezerViewController alloc] initWithNibName:@"TweezerViewController" bundle:nil]; 
-    self.window.rootViewController = self.viewController;
+    TWZListsViewController *listsVC = [[TWZListsViewController alloc] initWithNibName:@"TWZListsViewController" bundle:nil]; 
+    self.navigationController = [[UINavigationController alloc] initWithRootViewController:listsVC];
+    self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
     return YES;
 }

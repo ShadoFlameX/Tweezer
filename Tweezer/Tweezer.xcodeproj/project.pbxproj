@@ -7,14 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D3B59E71441199E00F0B2C7 /* TWZList.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3B59E21441199E00F0B2C7 /* TWZList.m */; };
+		0D3B59E81441199E00F0B2C7 /* TWZStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3B59E41441199E00F0B2C7 /* TWZStatus.m */; };
+		0D3B59E91441199E00F0B2C7 /* TWZUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3B59E61441199E00F0B2C7 /* TWZUser.m */; };
+		0D3B59EE14411BCB00F0B2C7 /* TWZListsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3B59EC14411BCB00F0B2C7 /* TWZListsViewController.m */; };
+		0D3B59EF14411BCB00F0B2C7 /* TWZListsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D3B59ED14411BCB00F0B2C7 /* TWZListsViewController.xib */; };
+		0D3B59F314411DDA00F0B2C7 /* TWZQuoteBoardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3B59F114411DD900F0B2C7 /* TWZQuoteBoardViewController.m */; };
+		0D3B59F414411DDA00F0B2C7 /* TWZQuoteBoardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D3B59F214411DD900F0B2C7 /* TWZQuoteBoardViewController.xib */; };
 		0DB49858143E64D5008815EB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB49857143E64D5008815EB /* UIKit.framework */; };
 		0DB4985A143E64D5008815EB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB49859143E64D5008815EB /* Foundation.framework */; };
 		0DB4985C143E64D5008815EB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB4985B143E64D5008815EB /* CoreGraphics.framework */; };
 		0DB49862143E64D5008815EB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0DB49860143E64D5008815EB /* InfoPlist.strings */; };
 		0DB49864143E64D5008815EB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DB49863143E64D5008815EB /* main.m */; };
 		0DB49868143E64D5008815EB /* TweezerAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DB49867143E64D5008815EB /* TweezerAppDelegate.m */; };
-		0DB4986B143E64D5008815EB /* TweezerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DB4986A143E64D5008815EB /* TweezerViewController.m */; };
-		0DB4986E143E64D5008815EB /* TweezerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DB4986C143E64D5008815EB /* TweezerViewController.xib */; };
 		0DB49876143E64D5008815EB /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB49875143E64D5008815EB /* SenTestingKit.framework */; };
 		0DB49877143E64D5008815EB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB49857143E64D5008815EB /* UIKit.framework */; };
 		0DB49878143E64D5008815EB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB49859143E64D5008815EB /* Foundation.framework */; };
@@ -125,6 +130,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0D3B59E11441199E00F0B2C7 /* TWZList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWZList.h; sourceTree = "<group>"; };
+		0D3B59E21441199E00F0B2C7 /* TWZList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWZList.m; sourceTree = "<group>"; };
+		0D3B59E31441199E00F0B2C7 /* TWZStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWZStatus.h; sourceTree = "<group>"; };
+		0D3B59E41441199E00F0B2C7 /* TWZStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWZStatus.m; sourceTree = "<group>"; };
+		0D3B59E51441199E00F0B2C7 /* TWZUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWZUser.h; sourceTree = "<group>"; };
+		0D3B59E61441199E00F0B2C7 /* TWZUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWZUser.m; sourceTree = "<group>"; };
+		0D3B59EB14411BCB00F0B2C7 /* TWZListsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWZListsViewController.h; sourceTree = "<group>"; };
+		0D3B59EC14411BCB00F0B2C7 /* TWZListsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWZListsViewController.m; sourceTree = "<group>"; };
+		0D3B59ED14411BCB00F0B2C7 /* TWZListsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TWZListsViewController.xib; sourceTree = "<group>"; };
+		0D3B59F014411DD900F0B2C7 /* TWZQuoteBoardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWZQuoteBoardViewController.h; sourceTree = "<group>"; };
+		0D3B59F114411DD900F0B2C7 /* TWZQuoteBoardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWZQuoteBoardViewController.m; sourceTree = "<group>"; };
+		0D3B59F214411DD900F0B2C7 /* TWZQuoteBoardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TWZQuoteBoardViewController.xib; sourceTree = "<group>"; };
 		0DB49853143E64D5008815EB /* Tweezer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tweezer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DB49857143E64D5008815EB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		0DB49859143E64D5008815EB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -135,9 +152,6 @@
 		0DB49865143E64D5008815EB /* Tweezer-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tweezer-Prefix.pch"; sourceTree = "<group>"; };
 		0DB49866143E64D5008815EB /* TweezerAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TweezerAppDelegate.h; sourceTree = "<group>"; };
 		0DB49867143E64D5008815EB /* TweezerAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TweezerAppDelegate.m; sourceTree = "<group>"; };
-		0DB49869143E64D5008815EB /* TweezerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TweezerViewController.h; sourceTree = "<group>"; };
-		0DB4986A143E64D5008815EB /* TweezerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TweezerViewController.m; sourceTree = "<group>"; };
-		0DB4986D143E64D5008815EB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/TweezerViewController.xib; sourceTree = "<group>"; };
 		0DB49874143E64D5008815EB /* TweezerTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TweezerTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DB49875143E64D5008815EB /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		0DB4987E143E64D5008815EB /* TweezerTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TweezerTests-Info.plist"; sourceTree = "<group>"; };
@@ -182,6 +196,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0D3B59D41441198F00F0B2C7 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0D3B59E11441199E00F0B2C7 /* TWZList.h */,
+				0D3B59E21441199E00F0B2C7 /* TWZList.m */,
+				0D3B59E31441199E00F0B2C7 /* TWZStatus.h */,
+				0D3B59E41441199E00F0B2C7 /* TWZStatus.m */,
+				0D3B59E51441199E00F0B2C7 /* TWZUser.h */,
+				0D3B59E61441199E00F0B2C7 /* TWZUser.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		0D3B59EA14411B7B00F0B2C7 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				0D3B59EB14411BCB00F0B2C7 /* TWZListsViewController.h */,
+				0D3B59EC14411BCB00F0B2C7 /* TWZListsViewController.m */,
+				0D3B59ED14411BCB00F0B2C7 /* TWZListsViewController.xib */,
+				0D3B59F014411DD900F0B2C7 /* TWZQuoteBoardViewController.h */,
+				0D3B59F114411DD900F0B2C7 /* TWZQuoteBoardViewController.m */,
+				0D3B59F214411DD900F0B2C7 /* TWZQuoteBoardViewController.xib */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
 		0DB49848143E64D5008815EB = {
 			isa = PBXGroup;
 			children = (
@@ -219,11 +259,10 @@
 		0DB4985D143E64D5008815EB /* Tweezer */ = {
 			isa = PBXGroup;
 			children = (
+				0D3B59EA14411B7B00F0B2C7 /* View Controllers */,
+				0D3B59D41441198F00F0B2C7 /* Model */,
 				0DB49866143E64D5008815EB /* TweezerAppDelegate.h */,
 				0DB49867143E64D5008815EB /* TweezerAppDelegate.m */,
-				0DB49869143E64D5008815EB /* TweezerViewController.h */,
-				0DB4986A143E64D5008815EB /* TweezerViewController.m */,
-				0DB4986C143E64D5008815EB /* TweezerViewController.xib */,
 				0DB4985E143E64D5008815EB /* Supporting Files */,
 			);
 			path = Tweezer;
@@ -436,7 +475,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				0DB49862143E64D5008815EB /* InfoPlist.strings in Resources */,
-				0DB4986E143E64D5008815EB /* TweezerViewController.xib in Resources */,
+				0D3B59EF14411BCB00F0B2C7 /* TWZListsViewController.xib in Resources */,
+				0D3B59F414411DDA00F0B2C7 /* TWZQuoteBoardViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -473,7 +513,11 @@
 			files = (
 				0DB49864143E64D5008815EB /* main.m in Sources */,
 				0DB49868143E64D5008815EB /* TweezerAppDelegate.m in Sources */,
-				0DB4986B143E64D5008815EB /* TweezerViewController.m in Sources */,
+				0D3B59E71441199E00F0B2C7 /* TWZList.m in Sources */,
+				0D3B59E81441199E00F0B2C7 /* TWZStatus.m in Sources */,
+				0D3B59E91441199E00F0B2C7 /* TWZUser.m in Sources */,
+				0D3B59EE14411BCB00F0B2C7 /* TWZListsViewController.m in Sources */,
+				0D3B59F314411DDA00F0B2C7 /* TWZQuoteBoardViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -507,14 +551,6 @@
 				0DB49861143E64D5008815EB /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		0DB4986C143E64D5008815EB /* TweezerViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				0DB4986D143E64D5008815EB /* en */,
-			);
-			name = TweezerViewController.xib;
 			sourceTree = "<group>";
 		};
 		0DB4987F143E64D5008815EB /* InfoPlist.strings */ = {
