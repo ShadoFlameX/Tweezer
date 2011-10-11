@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D18C89614439F0A00929215 /* TWZSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D18C89414439F0A00929215 /* TWZSettingsViewController.m */; };
+		0D18C89714439F0A00929215 /* TWZSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D18C89514439F0A00929215 /* TWZSettingsViewController.xib */; };
+		0D18C89B1443A49A00929215 /* TWZSourceEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D18C8991443A49900929215 /* TWZSourceEditorViewController.m */; };
+		0D18C89C1443A49A00929215 /* TWZSourceEditorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D18C89A1443A49A00929215 /* TWZSourceEditorViewController.xib */; };
+		0D18C89F1443B21300929215 /* checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D18C89E1443B21300929215 /* checkmark.png */; };
+		0D18C8A21443B57600929215 /* TWZSourcePreset.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D18C8A11443B57600929215 /* TWZSourcePreset.m */; };
+		0D18C8AB1443C00300929215 /* TWZSettingPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D18C8A91443C00300929215 /* TWZSettingPicker.m */; };
+		0D18C8B214442A7E00929215 /* UIColor+TweezerExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D18C8B114442A7E00929215 /* UIColor+TweezerExtensions.m */; };
 		0D3B59E71441199E00F0B2C7 /* TWZList.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3B59E21441199E00F0B2C7 /* TWZList.m */; };
 		0D3B59E81441199E00F0B2C7 /* TWZStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3B59E41441199E00F0B2C7 /* TWZStatus.m */; };
 		0D3B59E91441199E00F0B2C7 /* TWZUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3B59E61441199E00F0B2C7 /* TWZUser.m */; };
@@ -130,6 +138,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0D18C89314439F0A00929215 /* TWZSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWZSettingsViewController.h; sourceTree = "<group>"; };
+		0D18C89414439F0A00929215 /* TWZSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWZSettingsViewController.m; sourceTree = "<group>"; };
+		0D18C89514439F0A00929215 /* TWZSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TWZSettingsViewController.xib; sourceTree = "<group>"; };
+		0D18C8981443A49900929215 /* TWZSourceEditorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWZSourceEditorViewController.h; sourceTree = "<group>"; };
+		0D18C8991443A49900929215 /* TWZSourceEditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWZSourceEditorViewController.m; sourceTree = "<group>"; };
+		0D18C89A1443A49A00929215 /* TWZSourceEditorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TWZSourceEditorViewController.xib; sourceTree = "<group>"; };
+		0D18C89E1443B21300929215 /* checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = checkmark.png; path = Images/checkmark.png; sourceTree = "<group>"; };
+		0D18C8A01443B57600929215 /* TWZSourcePreset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWZSourcePreset.h; sourceTree = "<group>"; };
+		0D18C8A11443B57600929215 /* TWZSourcePreset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWZSourcePreset.m; sourceTree = "<group>"; };
+		0D18C8A81443C00300929215 /* TWZSettingPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWZSettingPicker.h; sourceTree = "<group>"; };
+		0D18C8A91443C00300929215 /* TWZSettingPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWZSettingPicker.m; sourceTree = "<group>"; };
+		0D18C8AE1444193D00929215 /* TWZConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWZConstants.h; sourceTree = "<group>"; };
+		0D18C8B014442A7E00929215 /* UIColor+TweezerExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+TweezerExtensions.h"; sourceTree = "<group>"; };
+		0D18C8B114442A7E00929215 /* UIColor+TweezerExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+TweezerExtensions.m"; sourceTree = "<group>"; };
 		0D3B59E11441199E00F0B2C7 /* TWZList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWZList.h; sourceTree = "<group>"; };
 		0D3B59E21441199E00F0B2C7 /* TWZList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWZList.m; sourceTree = "<group>"; };
 		0D3B59E31441199E00F0B2C7 /* TWZStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWZStatus.h; sourceTree = "<group>"; };
@@ -196,6 +218,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0D18C89D1443B20000929215 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				0D18C89E1443B21300929215 /* checkmark.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+		0D18C8AF14442A6100929215 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				0D18C8B014442A7E00929215 /* UIColor+TweezerExtensions.h */,
+				0D18C8B114442A7E00929215 /* UIColor+TweezerExtensions.m */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
 		0D3B59D41441198F00F0B2C7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -205,6 +244,8 @@
 				0D3B59E41441199E00F0B2C7 /* TWZStatus.m */,
 				0D3B59E51441199E00F0B2C7 /* TWZUser.h */,
 				0D3B59E61441199E00F0B2C7 /* TWZUser.m */,
+				0D18C8A01443B57600929215 /* TWZSourcePreset.h */,
+				0D18C8A11443B57600929215 /* TWZSourcePreset.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -218,6 +259,14 @@
 				0D3B59F014411DD900F0B2C7 /* TWZQuoteBoardViewController.h */,
 				0D3B59F114411DD900F0B2C7 /* TWZQuoteBoardViewController.m */,
 				0D3B59F214411DD900F0B2C7 /* TWZQuoteBoardViewController.xib */,
+				0D18C89314439F0A00929215 /* TWZSettingsViewController.h */,
+				0D18C89414439F0A00929215 /* TWZSettingsViewController.m */,
+				0D18C89514439F0A00929215 /* TWZSettingsViewController.xib */,
+				0D18C8981443A49900929215 /* TWZSourceEditorViewController.h */,
+				0D18C8991443A49900929215 /* TWZSourceEditorViewController.m */,
+				0D18C89A1443A49A00929215 /* TWZSourceEditorViewController.xib */,
+				0D18C8A81443C00300929215 /* TWZSettingPicker.h */,
+				0D18C8A91443C00300929215 /* TWZSettingPicker.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -259,6 +308,7 @@
 		0DB4985D143E64D5008815EB /* Tweezer */ = {
 			isa = PBXGroup;
 			children = (
+				0D18C8AF14442A6100929215 /* Extensions */,
 				0D3B59EA14411B7B00F0B2C7 /* View Controllers */,
 				0D3B59D41441198F00F0B2C7 /* Model */,
 				0DB49866143E64D5008815EB /* TweezerAppDelegate.h */,
@@ -271,10 +321,12 @@
 		0DB4985E143E64D5008815EB /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0D18C89D1443B20000929215 /* Images */,
 				0DB4985F143E64D5008815EB /* Tweezer-Info.plist */,
 				0DB49860143E64D5008815EB /* InfoPlist.strings */,
 				0DB49863143E64D5008815EB /* main.m */,
 				0DB49865143E64D5008815EB /* Tweezer-Prefix.pch */,
+				0D18C8AE1444193D00929215 /* TWZConstants.h */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -477,6 +529,9 @@
 				0DB49862143E64D5008815EB /* InfoPlist.strings in Resources */,
 				0D3B59EF14411BCB00F0B2C7 /* TWZListsViewController.xib in Resources */,
 				0D3B59F414411DDA00F0B2C7 /* TWZQuoteBoardViewController.xib in Resources */,
+				0D18C89714439F0A00929215 /* TWZSettingsViewController.xib in Resources */,
+				0D18C89C1443A49A00929215 /* TWZSourceEditorViewController.xib in Resources */,
+				0D18C89F1443B21300929215 /* checkmark.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -518,6 +573,11 @@
 				0D3B59E91441199E00F0B2C7 /* TWZUser.m in Sources */,
 				0D3B59EE14411BCB00F0B2C7 /* TWZListsViewController.m in Sources */,
 				0D3B59F314411DDA00F0B2C7 /* TWZQuoteBoardViewController.m in Sources */,
+				0D18C89614439F0A00929215 /* TWZSettingsViewController.m in Sources */,
+				0D18C89B1443A49A00929215 /* TWZSourceEditorViewController.m in Sources */,
+				0D18C8A21443B57600929215 /* TWZSourcePreset.m in Sources */,
+				0D18C8AB1443C00300929215 /* TWZSettingPicker.m in Sources */,
+				0D18C8B214442A7E00929215 /* UIColor+TweezerExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -569,7 +629,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -585,7 +645,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(SOURCE_ROOT)/../RestKit/Build\"";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = "\"$(SOURCE_ROOT)/../RestKit/Build/$(BUILD_STYLE)-$(PLATFORM_NAME)\"";
 				SDKROOT = iphoneos;
 			};
@@ -596,7 +656,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -605,7 +665,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(SOURCE_ROOT)/../RestKit/Build\"";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = "\"$(SOURCE_ROOT)/../RestKit/Build/$(BUILD_STYLE)-$(PLATFORM_NAME)\"";
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;

@@ -10,11 +10,21 @@
 #import "TWZStatus.h"
 #import "TWZUser.h"
 #import "TWZList.h"
+#import "TWZConstants.h"
 
 @implementation TweezerAppDelegate
 
 @synthesize window = _window;
 @synthesize navigationController = _navigationController;
+
++ (void)initialize
+{
+    NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
+                              [NSNumber numberWithInt:0],TWZUserDefaultShuffleMode,
+                              [NSNumber numberWithInt:5],TWZUserDefaultQuoteDuration,
+                              nil];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -65,8 +75,8 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    TWZListsViewController *listsVC = [[TWZListsViewController alloc] initWithNibName:@"TWZListsViewController" bundle:nil]; 
-    self.navigationController = [[UINavigationController alloc] initWithRootViewController:listsVC];
+    TWZQuoteBoardViewController *qbVC = [[TWZQuoteBoardViewController alloc] initWithNibName:@"TWZQuoteBoardViewController" bundle:nil]; 
+    self.navigationController = [[UINavigationController alloc] initWithRootViewController:qbVC];
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
     return YES;

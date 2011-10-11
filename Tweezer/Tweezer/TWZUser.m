@@ -14,12 +14,12 @@
 @synthesize name = _name;
 @synthesize screenName = _screenName;
 
-//- (void)dealloc {
-//    [_userID release];
-//	[_name release];
-//	[_screenName release];
-//    
-//    [super dealloc];
-//}
+- (void)dealloc {
+    [_userID release];
+	[_name release];
+	[_screenName release];
+    
+    [super dealloc];
+}
 
 @end

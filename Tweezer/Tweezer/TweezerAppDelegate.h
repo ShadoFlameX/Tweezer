@@ -8,14 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <RestKit/RestKit.h>
-#import "TWZListsViewController.h"
+#import "TWZQuoteBoardViewController.h"
 
 @class TweezerViewController;
 
 @interface TweezerAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-
 @property (strong, nonatomic) UINavigationController *navigationController;
 
 @end
