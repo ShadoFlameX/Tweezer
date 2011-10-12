@@ -12,9 +12,9 @@
 
 @implementation UIColor (TweezerExtensions)
 
-+ (UIColor *)selectedTextColor
++ (UIColor *)addSourcePresetTextColor
 {
-    return [UIColor colorWithRed:RGB255(43) green:RGB255(63) blue:RGB255(118) alpha:1.0f];
+    return [UIColor colorWithRed:RGB255(20) green:RGB255(180) blue:RGB255(20) alpha:1.0f];
 }
 
 @end

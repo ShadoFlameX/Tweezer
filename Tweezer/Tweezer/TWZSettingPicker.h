@@ -18,7 +18,7 @@
                      settings:(NSDictionary *)settings
                    comparitor:(NSComparator)comparitor;
 
-@property (nonatomic,retain) NSString *defaultsKey;
+@property (nonatomic,copy) NSString *defaultsKey;
 @property (nonatomic,retain) NSDictionary *settings;
 @property (nonatomic,retain) NSComparator keyComparitor;
 

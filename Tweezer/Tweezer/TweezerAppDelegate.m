@@ -7,6 +7,7 @@
 //
 
 #import "TweezerAppDelegate.h"
+#import "TWZListsViewController.h"
 #import "TWZStatus.h"
 #import "TWZUser.h"
 #import "TWZList.h"
@@ -77,6 +78,11 @@
     // Override point for customization after application launch.
     TWZQuoteBoardViewController *qbVC = [[TWZQuoteBoardViewController alloc] initWithNibName:@"TWZQuoteBoardViewController" bundle:nil]; 
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:qbVC];
+
+//    TWZListsViewController *vc = [[TWZListsViewController alloc] initWithNibName:@"TWZListsViewController" bundle:nil];
+//    self.navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
+
+    
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
     return YES;

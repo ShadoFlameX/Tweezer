@@ -144,6 +144,9 @@
 - (void)setUsers:(NSArray *)users
 {
     if (users == _users) return;
+    
+    [users retain];
+    [_users release];
     _users = users;
     
     if (self.users.count) {

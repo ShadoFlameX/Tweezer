@@ -7,7 +7,7 @@
 //
 
 #import "TWZSettingPicker.h"
-#import "UIColor+TweezerExtensions.h"
+#import "UIColor+BHExtensions.h"
 
 @implementation TWZSettingPicker
 
@@ -17,7 +17,7 @@
 
 - (id)initWithUserDefaultsKey:(NSString *)defaultsKey settings:(NSDictionary *)settings comparitor:(NSComparator)comparitor
 {
-    self = [super initWithStyle:UITableViewStylePlain];
+    self = [super initWithStyle:UITableViewStyleGrouped];
     if (self) {
         self.defaultsKey = defaultsKey;
         self.settings = settings;

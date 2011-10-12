@@ -8,8 +8,10 @@
 
 #import "TWZSettingsViewController.h"
 #import "TWZSettingPicker.h"
+#import "TWZSourceEditorViewController.h"
 #import "TWZSourcePreset.h"
 #import "TWZConstants.h"
+#import "UIColor+TweezerExtensions.h"
 
 enum {
     TWZSettingsTableSectionSourcePresets,
@@ -80,8 +82,7 @@ enum {
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(close:)];
 }
 
 - (void)viewDidUnload
@@ -123,6 +124,14 @@ enum {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+
+#pragma mark - API
+
+- (void)close:(id)sender {
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -133,7 +142,7 @@ enum {
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == TWZSettingsTableSectionSourcePresets) {
-        return [TWZSourcePreset allPresets].count;
+        return [TWZSourcePreset allPresets].count + 1;
     }
     if (section == TWZSettingsTableSectionRandomMode) {
         return 1;
@@ -172,6 +181,19 @@ enum {
             
             return cell;
         }
+        else {
+            static NSString *CellIdentifier = @"SourcePresetAddCell";
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                cell.textLabel.textAlignment = UITextAlignmentCenter;
+            }
+            
+            cell.textLabel.text = NSLocalizedString(@"Add Preset", @"settings cell title");
+            cell.textLabel.textColor = [UIColor addSourcePresetTextColor];
+            
+            return cell;
+        }
     }
     if (indexPath.section == TWZSettingsTableSectionRandomMode) {
         static NSString *CellIdentifier = @"RandomModeCell";
@@ -180,7 +202,7 @@ enum {
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
         }
         
-        cell.textLabel.text = NSLocalizedString(@"Shuffle", @"Settings cell title");
+        cell.textLabel.text = NSLocalizedString(@"Shuffle Preset", @"Settings cell title");
         
         NSDictionary *shuffleSettings = [TWZSettingsViewController dictionaryForUserDefaultsKey:TWZUserDefaultShuffleMode];
         cell.detailTextLabel.text = [shuffleSettings objectForKey:[[NSUserDefaults standardUserDefaults] objectForKey:TWZUserDefaultShuffleMode]];
@@ -250,6 +272,17 @@ enum {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == TWZSettingsTableSectionSourcePresets)
+    {
+        if (indexPath.row < [TWZSourcePreset allPresets].count) {
+            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        }
+        else {
+            TWZSourceEditorViewController *sourceEditorVC = [[TWZSourceEditorViewController alloc] initWithNibName:@"TWZSourceEditorViewController" bundle:nil];
+            [self.navigationController pushViewController:sourceEditorVC animated:YES];
+            [sourceEditorVC release];
+        }
+    }
     if (indexPath.section == TWZSettingsTableSectionRandomMode)
     {
         TWZSettingPicker *settingPicker = [[TWZSettingPicker alloc] initWithUserDefaultsKey:TWZUserDefaultShuffleMode settings:[TWZSettingsViewController dictionaryForUserDefaultsKey:TWZUserDefaultShuffleMode] comparitor:^(NSNumber *num1, NSNumber *num2) {return [num1 compare:num2];}];

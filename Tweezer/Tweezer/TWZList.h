@@ -11,7 +11,7 @@
 @interface TWZList : NSObject
 
 @property (nonatomic,retain) NSNumber *listID;
-@property (nonatomic,retain) NSString *name;
+@property (nonatomic,copy) NSString *name;
 
 
 //    "name": "Digital Marketing",

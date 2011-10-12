@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TWZSourcePreset.h"
 
-@interface TWZSourceEditorViewController : UITableViewController
+@interface TWZSourceEditorViewController : UITableViewController <UITextFieldDelegate> {
+    
+}
+
+@property(nonatomic,retain) TWZSourcePreset *sourcePreset;
 
 @end
