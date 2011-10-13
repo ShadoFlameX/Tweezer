@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TWZList : NSObject
+@interface TWZList : NSObject <NSCoding>
 
 @property (nonatomic,retain) NSNumber *listID;
 @property (nonatomic,copy) NSString *name;

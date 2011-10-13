@@ -13,6 +13,7 @@
 
 @implementation TWZListsViewController
 
+@synthesize delegate;
 @synthesize lists;
 @synthesize loadingRowIndexPath;
 
@@ -174,18 +175,23 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    self.loadingRowIndexPath = indexPath;
-    [self.tableView reloadData];
+//    self.loadingRowIndexPath = indexPath;
+//    [self.tableView reloadData];
+//    
+//    RKObjectManager* objectManager = [RKObjectManager sharedManager];
+//    objectManager.client.baseURL = @"http://api.twitter.com";
+//    [objectManager loadObjectsAtResourcePath:[NSString stringWithFormat:@"/1/lists/members.json?list_id=%@",[(TWZList *)[self.lists objectAtIndex:indexPath.row] listID]] delegate:self block:^(RKObjectLoader* loader) {
+//        // Twitter returns statuses as a naked array in JSON, so we instruct the loader
+//        // to user the appropriate object mapping
+//        if ([objectManager.acceptMIMEType isEqualToString:RKMIMETypeJSON]) {
+//            loader.objectMapping = [objectManager.mappingProvider objectMappingForClass:[TWZUser class]];
+//        }
+//    }];
     
-    RKObjectManager* objectManager = [RKObjectManager sharedManager];
-    objectManager.client.baseURL = @"http://api.twitter.com";
-    [objectManager loadObjectsAtResourcePath:[NSString stringWithFormat:@"/1/lists/members.json?list_id=%@",[(TWZList *)[self.lists objectAtIndex:indexPath.row] listID]] delegate:self block:^(RKObjectLoader* loader) {
-        // Twitter returns statuses as a naked array in JSON, so we instruct the loader
-        // to user the appropriate object mapping
-        if ([objectManager.acceptMIMEType isEqualToString:RKMIMETypeJSON]) {
-            loader.objectMapping = [objectManager.mappingProvider objectMappingForClass:[TWZUser class]];
-        }
-    }];
+    if (delegate && [delegate respondsToSelector:@selector(listViewController:didSelectList:)]) {
+        [delegate listViewController:self didSelectList:[self.lists objectAtIndex:indexPath.row]];
+    }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 
@@ -209,15 +215,15 @@
         self.lists = objects;
         [self.tableView reloadData];
     }
-    else if (objectLoader.objectMapping.objectClass == [TWZUser class]) {
-        if (objects.count) {
-            TWZQuoteBoardViewController *qbVC = [[TWZQuoteBoardViewController alloc] initWithNibName:@"TWZQuoteBoardViewController" bundle:nil];
-            qbVC.users = objects;
-            [self.navigationController pushViewController:qbVC animated:YES];
-        }
-        self.loadingRowIndexPath = nil;
-        [self.tableView reloadData];
-    }
+//    else if (objectLoader.objectMapping.objectClass == [TWZUser class]) {
+//        if (objects.count) {
+//            TWZQuoteBoardViewController *qbVC = [[TWZQuoteBoardViewController alloc] initWithNibName:@"TWZQuoteBoardViewController" bundle:nil];
+//            qbVC.users = objects;
+//            [self.navigationController pushViewController:qbVC animated:YES];
+//        }
+//        self.loadingRowIndexPath = nil;
+//        [self.tableView reloadData];
+//    }
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {

@@ -23,4 +23,20 @@
     return self;
 }
 
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super init];
+    if (self) {
+        self.listID = [aDecoder decodeObjectForKey:@"listID"];
+        self.name = [aDecoder decodeObjectForKey:@"name"];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.listID forKey:@"listID"];
+    [aCoder encodeObject:self.name forKey:@"name"];
+}
+
 @end

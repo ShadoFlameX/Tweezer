@@ -9,6 +9,8 @@
 #import "TWZQuoteBoardViewController.h"
 #import "TWZSettingsViewController.h"
 #import "TWZStatus.h"
+#import "TWZList.h"
+#import "TWZSourcePreset.h"
 
 @implementation TWZQuoteBoardViewController
 
@@ -23,6 +25,17 @@
     RKObjectManager* objectManager = [RKObjectManager sharedManager];
     objectManager.client.baseURL = @"http://api.twitter.com";
     [objectManager loadObjectsAtResourcePath:[NSString stringWithFormat:@"/1/statuses/user_timeline.json?user_id=%@",user.userID] delegate:self block:^(RKObjectLoader* loader) {
+        if ([objectManager.acceptMIMEType isEqualToString:RKMIMETypeJSON]) {
+            loader.objectMapping = [objectManager.mappingProvider objectMappingForClass:[TWZStatus class]];
+        }
+    }];
+}
+
+- (void)loadTweetsForList:(TWZList *)list
+{
+    RKObjectManager* objectManager = [RKObjectManager sharedManager];
+    objectManager.client.baseURL = @"http://api.twitter.com";
+    [objectManager loadObjectsAtResourcePath:[NSString stringWithFormat:@"/1/lists/statuses.json?list_id=%@",list.listID] delegate:self block:^(RKObjectLoader* loader) {
         if ([objectManager.acceptMIMEType isEqualToString:RKMIMETypeJSON]) {
             loader.objectMapping = [objectManager.mappingProvider objectMappingForClass:[TWZStatus class]];
         }
@@ -54,7 +67,7 @@
     
     self.statuses = [NSMutableArray array];
     
-    if (NO) {
+    if ([TWZSourcePreset allPresets].count) {
         [self.setupContainerView removeFromSuperview];
     }
     else {
@@ -71,8 +84,9 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    if (NO) {
+    if ([TWZSourcePreset allPresets].count) {
         [self.navigationController setNavigationBarHidden:YES animated:animated];
+        [self loadTweetsForList:((TWZSourcePreset *)[[TWZSourcePreset allPresets] objectAtIndex:0]).list];
     }
     else {
         [self.navigationController setNavigationBarHidden:NO animated:animated];
@@ -102,10 +116,10 @@
     if (!self.tweetTimer) {
         self.tweetTimer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(showTweet) userInfo:nil repeats:YES];
     }
-    if (_userIndex < self.users.count - 1) {
-        _userIndex++;
-        [self loadTweetsForUser:[self.users objectAtIndex:_userIndex]];
-    }
+//    if (_userIndex < self.users.count - 1) {
+//        _userIndex++;
+//        [self loadTweetsForUser:[self.users objectAtIndex:_userIndex]];
+//    }
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {

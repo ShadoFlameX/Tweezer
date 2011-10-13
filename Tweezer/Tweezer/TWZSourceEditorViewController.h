@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "TWZSourcePreset.h"
+#import "TWZListsViewController.h"
 
-@interface TWZSourceEditorViewController : UITableViewController <UITextFieldDelegate> {
+@interface TWZSourceEditorViewController : UITableViewController <TWZListsViewControllerDelegate,UITextFieldDelegate> {
     
 }
 

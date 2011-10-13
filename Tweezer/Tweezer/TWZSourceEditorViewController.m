@@ -39,6 +39,7 @@ enum {
 {
     TWZSourcePreset *_tempSourcePreset;
 }
+- (void)setup;
 - (void)close:(id)sender;
 - (void)save:(id)sender;
 
@@ -55,9 +56,23 @@ enum {
 {
     self = [super initWithStyle:style];
     if (self) {
-
+        [self setup];
     }
     return self;
+}
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        [self setup];
+    }
+    return self;
+}
+
+- (void)setup
+{
+    self.tempSourcePreset = [[[TWZSourcePreset alloc] initWithName:nil] autorelease];
 }
 
 - (void)didReceiveMemoryWarning
@@ -78,7 +93,7 @@ enum {
  
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(close:)];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(save:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(save:)];
     
     UIView *headerContainer = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.view.bounds.size.width, 96.0f)];
     TWZSourceHeaderView *headerView = [[TWZSourceHeaderView alloc] initWithFrame:CGRectMake(0.0f, -480.0f, self.view.bounds.size.width, 96.0f + 480.0f)];
@@ -86,9 +101,7 @@ enum {
     self.tableView.tableHeaderView = headerContainer;
     [headerContainer release];
     [headerView release];
-    
-    self.sourcePreset = [[[TWZSourcePreset alloc] initWithName:nil] autorelease];
-    
+        
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidUpdate:) name:UITextFieldTextDidChangeNotification object:nil];
 }
 
@@ -145,18 +158,39 @@ enum {
 
 - (void)save:(id)sender
 {
-    BHTextFieldCell *nameCell = (BHTextFieldCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:TWZSourceTableSectionBasicsRowName inSection:TWZSourceTableSectionBasics]];
-    
-    if (![nameCell.textField.text length]) {
+    if (![self.tempSourcePreset.name length]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Name Required", @"alert title") message:NSLocalizedString(@"Please enter a name for this preset.", @"alert message") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil];
         [alert show];
         [alert release];
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:TWZSourceTableSectionBasicsRowName inSection:TWZSourceTableSectionBasics] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        
+        BHTextFieldCell *nameCell = (BHTextFieldCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:TWZSourceTableSectionBasicsRowName inSection:TWZSourceTableSectionBasics]];
         [nameCell.textField becomeFirstResponder];
         return;
     }
+    if (!self.tempSourcePreset.list) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"List Required", @"alert title") message:NSLocalizedString(@"Please select a list source for this preset.", @"alert message") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        return;
+    }
     
-    self.sourcePreset.name = nameCell.textField.text;
+    if (self.sourcePreset)
+    {
+        self.sourcePreset.name = self.tempSourcePreset.name;
+        self.sourcePreset.keywords = self.tempSourcePreset.keywords;
+        self.sourcePreset.matching = self.tempSourcePreset.matching;
+        self.sourcePreset.includesResponses = self.tempSourcePreset.includesResponses;
+        self.sourcePreset.includesRetweets = self.tempSourcePreset.includesRetweets;
+        self.sourcePreset.list = self.tempSourcePreset.list;
+        
+        [TWZSourcePreset savePresets];
+    }
+    else
+    {
+        [TWZSourcePreset addPreset:self.tempSourcePreset];
+    }
+    
     [self close:nil];
 }
 
@@ -270,7 +304,7 @@ enum {
             }
             
             cell.textLabel.text = NSLocalizedString(@"List", @"source editor cell title");
-            cell.detailTextLabel.text = NSLocalizedString(@"Required", @"source editor cell placeholder value");
+            cell.detailTextLabel.text = (self.tempSourcePreset.list) ? self.tempSourcePreset.list.name : NSLocalizedString(@"Required", @"source editor cell placeholder value");
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             
             return cell;
@@ -360,25 +394,73 @@ enum {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == TWZSourceTableSectionPeople)
+    {
+        if (indexPath.row == TWZSourceTableSectionPeopleRowSource)
+        {
+            TWZListsViewController *listsVC = [[TWZListsViewController alloc] initWithNibName:@"TWZListsViewController" bundle:nil];
+            listsVC.delegate = self;
+            [self.navigationController pushViewController:listsVC animated:YES];
+        }
+    }
+}
+
+
+#pragma mark - TWZListsViewController delegate
+
+- (void)listViewController:(TWZListsViewController *)listViewController didSelectList:(TWZList *)list
+{
+    self.tempSourcePreset.list = list;
     
+    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+    [self.tableView reloadData];
+    if (indexPath) [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+
 }
 
 
 #pragma mark - UITextField delegate & notifications
 
-- (void)textFieldDidUpdate:(NSNotification *)notification {
-    NSUInteger rowCount = [self.tableView numberOfRowsInSection:TWZSourceTableSectionKeywords];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowCount - 1 inSection:TWZSourceTableSectionKeywords];
-    BHTextFieldCell *cell = (BHTextFieldCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-    if ([cell.textField isEqual:[notification object]] && [cell.textField.text length])
+- (void)textFieldDidUpdate:(NSNotification *)notification
+{
+    NSUInteger sectionCount = [self.tableView numberOfSections];
+    NSUInteger secIndex, rowIndex;
+    for (secIndex=0; secIndex<sectionCount; secIndex++)
     {
-        // this is the "new keyword" cell
-        [self.tableView beginUpdates];
-        [self.tempSourcePreset.keywords addObject:@""];
-        NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
-        [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationTop];
-        [self.tableView endUpdates];
+        NSUInteger rowCount = [self.tableView numberOfRowsInSection:secIndex];
+        for (rowIndex=0; rowIndex<rowCount; rowIndex++)
+        {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:secIndex];
+            if (indexPath.section == TWZSourceTableSectionBasics && indexPath.row == TWZSourceTableSectionBasicsRowName)
+            {
+                BHTextFieldCell *cell = (BHTextFieldCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+                self.tempSourcePreset.name = cell.textField.text;
+                return;
+            }
+            if (indexPath.section == TWZSourceTableSectionKeywords && indexPath.row == rowCount - 1)
+            {
+                // this is the "new keyword" cell
+                [self.tableView beginUpdates];
+                [self.tempSourcePreset.keywords addObject:@""];
+                NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
+                [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationTop];
+                [self.tableView endUpdates];
+            }
+        }
     }
+    
+//    NSUInteger rowCount = [self.tableView numberOfRowsInSection:TWZSourceTableSectionKeywords];
+//    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowCount - 1 inSection:TWZSourceTableSectionKeywords];
+//    BHTextFieldCell *cell = (BHTextFieldCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+//    if ([cell.textField isEqual:[notification object]] && [cell.textField.text length])
+//    {
+//        // this is the "new keyword" cell
+//        [self.tableView beginUpdates];
+//        [self.tempSourcePreset.keywords addObject:@""];
+//        NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
+//        [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationTop];
+//        [self.tableView endUpdates];
+//    }
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -441,6 +523,7 @@ enum {
     _sourcePreset = sourcePreset;
     
     self.tempSourcePreset = [sourcePreset copy];
+    self.title = NSLocalizedString(@"Edit Preset", @"view controller title");
 }
 
 @end
