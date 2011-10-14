@@ -11,6 +11,11 @@
 #import "TWZStatus.h"
 #import "TWZList.h"
 #import "TWZSourcePreset.h"
+#import "TWZTextAnimationView.h"
+
+@interface TWZQuoteBoardViewController ()
+- (void)showTweet;
+@end
 
 @implementation TWZQuoteBoardViewController
 
@@ -103,11 +108,11 @@
 #pragma mark - RKObjectLoaderDelegate methods
 
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {
-    NSLog(@"Loaded payload: %@", [response bodyAsString]);
+//    NSLog(@"Loaded payload: %@", [response bodyAsString]);
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObjects:(NSArray*)objects {
-	NSLog(@"Loaded msg: %@", objects);
+//	NSLog(@"Loaded msg: %@", objects);
     for (TWZStatus *aStatus in objects) {
         if (!aStatus.inReplyToScreenName) {
             [self.statuses addObject:aStatus];
@@ -115,6 +120,7 @@
     }
     if (!self.tweetTimer) {
         self.tweetTimer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(showTweet) userInfo:nil repeats:YES];
+        [self showTweet];
     }
 //    if (_userIndex < self.users.count - 1) {
 //        _userIndex++;
@@ -143,9 +149,22 @@
 - (void)showTweet
 {
     if (self.statuses.count) {
-        NSUInteger index = rand()%self.statuses.count;
-        TWZStatus *aStatus = [self.statuses objectAtIndex:index];
-        self.statusLabel.text = aStatus.text;
+//        NSUInteger index = rand()%self.statuses.count;
+//        TWZStatus *aStatus = [self.statuses objectAtIndex:index];
+//        self.statusLabel.text = aStatus.text;
+        
+        TWZTextAnimationView *taView = [[TWZTextAnimationView alloc] initWithString:@"Being the richest man in the cemetery doesn't matter to me. Going to bed at night saying we've done something wonderful, that's what matters to me. Being the richest man in the cemetery doesn't matter to me. Going to bed at night saying we've done something wonderful, that's what matters to me."];
+
+        taView.backgroundColor = [UIColor clearColor];
+        [taView sizeToFit];
+        
+        CGRect r = taView.frame;
+        r.origin.x = 10.0f;
+        r.origin.y = 10.0f;
+        taView.frame = r;
+        [self.view addSubview:taView];
+        
+        [self.tweetTimer invalidate];
     }
     else {
         [self.tweetTimer invalidate];

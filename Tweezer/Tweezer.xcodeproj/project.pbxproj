@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D0F5D26144773490081E352 /* TWZTextAnimationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D0F5D25144773490081E352 /* TWZTextAnimationView.m */; };
+		0D0F5D28144776050081E352 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D0F5D27144776050081E352 /* CoreText.framework */; };
+		0D0F5D2A1447A6C30081E352 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D0F5D291447A6C30081E352 /* QuartzCore.framework */; };
+		0D0F5D2E1447AC100081E352 /* TWZGlyphLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D0F5D2D1447AC100081E352 /* TWZGlyphLayer.m */; };
 		0D18C89614439F0A00929215 /* TWZSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D18C89414439F0A00929215 /* TWZSettingsViewController.m */; };
 		0D18C89714439F0A00929215 /* TWZSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D18C89514439F0A00929215 /* TWZSettingsViewController.xib */; };
 		0D18C89B1443A49A00929215 /* TWZSourceEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D18C8991443A49900929215 /* TWZSourceEditorViewController.m */; };
@@ -144,6 +148,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0D0F5D24144773490081E352 /* TWZTextAnimationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWZTextAnimationView.h; sourceTree = "<group>"; };
+		0D0F5D25144773490081E352 /* TWZTextAnimationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWZTextAnimationView.m; sourceTree = "<group>"; };
+		0D0F5D27144776050081E352 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		0D0F5D291447A6C30081E352 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		0D0F5D2C1447AC100081E352 /* TWZGlyphLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWZGlyphLayer.h; sourceTree = "<group>"; };
+		0D0F5D2D1447AC100081E352 /* TWZGlyphLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWZGlyphLayer.m; sourceTree = "<group>"; };
 		0D18C89314439F0A00929215 /* TWZSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWZSettingsViewController.h; sourceTree = "<group>"; };
 		0D18C89414439F0A00929215 /* TWZSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWZSettingsViewController.m; sourceTree = "<group>"; };
 		0D18C89514439F0A00929215 /* TWZSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TWZSettingsViewController.xib; sourceTree = "<group>"; };
@@ -206,6 +216,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D0F5D2A1447A6C30081E352 /* QuartzCore.framework in Frameworks */,
+				0D0F5D28144776050081E352 /* CoreText.framework in Frameworks */,
 				0DC178BD143FEFCC002CD4C3 /* CFNetwork.framework in Frameworks */,
 				0DC178BE143FEFCC002CD4C3 /* MobileCoreServices.framework in Frameworks */,
 				0DC178BF143FEFCC002CD4C3 /* SystemConfiguration.framework in Frameworks */,
@@ -295,6 +307,10 @@
 			children = (
 				0DA4015514461668008F3DA6 /* TWZSourceHeaderView.h */,
 				0DA4015614461668008F3DA6 /* TWZSourceHeaderView.m */,
+				0D0F5D24144773490081E352 /* TWZTextAnimationView.h */,
+				0D0F5D25144773490081E352 /* TWZTextAnimationView.m */,
+				0D0F5D2C1447AC100081E352 /* TWZGlyphLayer.h */,
+				0D0F5D2D1447AC100081E352 /* TWZGlyphLayer.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -338,6 +354,8 @@
 		0DB49848143E64D5008815EB = {
 			isa = PBXGroup;
 			children = (
+				0D0F5D291447A6C30081E352 /* QuartzCore.framework */,
+				0D0F5D27144776050081E352 /* CoreText.framework */,
 				0DB4985D143E64D5008815EB /* Tweezer */,
 				0DB4987C143E64D5008815EB /* TweezerTests */,
 				0DB49856143E64D5008815EB /* Frameworks */,
@@ -648,6 +666,8 @@
 				0DA4015714461668008F3DA6 /* TWZSourceHeaderView.m in Sources */,
 				0DA4015C14461ACB008F3DA6 /* BHTextFieldCell.m in Sources */,
 				0DA401611446212A008F3DA6 /* UIColor+BHExtensions.m in Sources */,
+				0D0F5D26144773490081E352 /* TWZTextAnimationView.m in Sources */,
+				0D0F5D2E1447AC100081E352 /* TWZGlyphLayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
