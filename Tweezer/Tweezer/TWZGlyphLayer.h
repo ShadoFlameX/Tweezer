@@ -10,14 +10,16 @@
 
 @interface TWZGlyphLayer : CALayer
 {
-    CGGlyph _glyph;
+    CGGlyph *_glyphs;
+    size_t _count;
     CGFontRef _font;
+    CGFloat _fontSize;
 }
 
-- (id)initWithGlyph:(CGGlyph)glyph;
+- (id)initWithGlyphs:(CGGlyph *)glyphs count:(size_t)count;
 
-@property(nonatomic,assign) CGGlyph glyph;
 @property(nonatomic,assign) CGFontRef font;
+@property(nonatomic,assign) CGFloat fontSize;
 @property(nonatomic,assign) CGFloat baseline;
 
 @end

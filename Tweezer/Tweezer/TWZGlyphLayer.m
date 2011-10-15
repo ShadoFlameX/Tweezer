@@ -10,15 +10,24 @@
 
 @implementation TWZGlyphLayer
 
-@synthesize glyph = _glyph;
 @synthesize font = _font;
+@synthesize fontSize = _fontSize;
 @synthesize baseline;
 
-- (id)initWithGlyph:(CGGlyph)glyph {
+- (id)initWithGlyphs:(CGGlyph *)glyphs count:(size_t)count
+{
     self = [super init];
     if (self) {
         self.contentsScale = [UIScreen mainScreen].scale;
-        self.glyph = glyph;
+        
+        _count = count;
+        _glyphs = malloc(sizeof(CGGlyph) * _count);
+        
+        int i;
+        for (i=0;i<_count;i++)
+        {
+            _glyphs[i] = glyphs[i];
+        }        
         self.baseline = 0.0f;
     }
     return self;
@@ -33,10 +42,9 @@
     
     CGContextSetFillColorWithColor(ctx, [UIColor whiteColor].CGColor);
     CGContextSetFont(ctx, _font);
-    CGContextSetFontSize(ctx, 32.0f);
+    CGContextSetFontSize(ctx, self.fontSize);
     
-    CGGlyph glyphs[1] = {self.glyph};
-    CGContextShowGlyphsAtPoint(ctx, 0.0f, self.baseline, glyphs, 1);
+    CGContextShowGlyphsAtPoint(ctx, 0.0f, self.baseline, _glyphs, _count);
 }
 
 @end

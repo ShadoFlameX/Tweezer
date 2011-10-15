@@ -153,7 +153,7 @@
 //        TWZStatus *aStatus = [self.statuses objectAtIndex:index];
 //        self.statusLabel.text = aStatus.text;
         
-        TWZTextAnimationView *taView = [[TWZTextAnimationView alloc] initWithString:@"Being the richest man in the cemetery doesn't matter to me. Going to bed at night saying we've done something wonderful, that's what matters to me. Being the richest man in the cemetery doesn't matter to me. Going to bed at night saying we've done something wonderful, that's what matters to me."];
+        TWZTextAnimationView *taView = [[TWZTextAnimationView alloc] initWithString:@"Being the richest man in the cemetery doesn't matter to me. Going to bed at night saying we've done something wonderful, that's what matters to me."];
 
         taView.backgroundColor = [UIColor clearColor];
         [taView sizeToFit];
