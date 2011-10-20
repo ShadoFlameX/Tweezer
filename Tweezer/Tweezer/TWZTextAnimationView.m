@@ -52,8 +52,7 @@
 {
     self.backgroundColor = [UIColor whiteColor];
     self.textColor = [UIColor blackColor];
-    self.font = [UIFont systemFontOfSize:32.0f];
-
+    self.font = [UIFont systemFontOfSize:10.0f];
 }
 
 - (void)layoutSubviews
@@ -248,12 +247,18 @@
 	CFRelease(font);
 }
 
-//- (void)setHidden:(BOOL)hidden animation:(TWZTextAnimation)style completion:(void (^)(BOOL finished))completion
+- (void)setHidden:(BOOL)hidden
+{
+    [self setHidden:hidden animation:TWZTextAnimationNone completion:NULL];
+}
+
 - (void)setHidden:(BOOL)hidden animation:(TWZTextAnimation)style completion:(void (^)(void))completion
 {
-    self.hidden = hidden;
-    
-    if (style != TWZTextAnimationNone)
+    if (style == TWZTextAnimationNone)
+    {
+        super.hidden = hidden;
+    }
+    else
     {
         self.completion = completion;
         [self layoutIfNeeded];
@@ -269,8 +274,23 @@
                 {
                     anim.delegate = self;
                 }
-                [lyr addAnimation:anim forKey:@"ShowHide"];
-                if (style == TWZTextAnimationDropRotate) delay += TWZTextAnimationViewDelay;
+                if (style == TWZTextAnimationDropRotateIn)
+                {
+                    super.hidden = hidden;
+                    [lyr addAnimation:anim forKey:@"Show"];
+                    delay += TWZTextAnimationViewDelay;
+                }
+                else if (style == TWZTextAnimationFadeIn)
+                {
+                    super.hidden = hidden;
+                    [lyr addAnimation:anim forKey:@"Show"];
+
+                }
+                else if (style == TWZTextAnimationFadeOut)
+                {
+                    [lyr addAnimation:anim forKey:@"Hide"];
+                    
+                }
             }
         }
     }
@@ -278,13 +298,8 @@
 
 - (CAAnimation *)animationForGlyphLayer:(TWZGlyphLayer *)layer style:(TWZTextAnimation)style delay:(CGFloat)delay
 {
-    if (style == TWZTextAnimationDropRotate)
+    if (style == TWZTextAnimationDropRotateIn)
     {
-        if (self.hidden)
-        {
-            // hiding is not supported for TWZTextAnimationStyleDropRotate
-            return [self animationForGlyphLayer:layer style:TWZTextAnimationFade delay:0];
-        }
         CGFloat duration = 0.4f;
         
         CABasicAnimation *opacityAnim = [CABasicAnimation animationWithKeyPath:@"opacity"];
@@ -300,71 +315,88 @@
         transformAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
         transformAnim.fromValue = [NSValue valueWithCATransform3D:CATransform3DRotate(CATransform3DTranslate(CATransform3DMakeScale(4.0f, 4.0f, 1.0f),0,-self.font.pointSize/3.0f,0), M_PI, 0, 0, 1)];
         transformAnim.toValue = [NSValue valueWithCATransform3D:layer.transform];
-        transformAnim.removedOnCompletion = FALSE;
         
         CAAnimationGroup *animGroup = [CAAnimationGroup animation];
         animGroup.fillMode=kCAFillModeBackwards;
+        animGroup.removedOnCompletion = FALSE;
         animGroup.duration = duration;
         animGroup.beginTime = CACurrentMediaTime() + delay;
         animGroup.animations = [NSArray arrayWithObjects:opacityAnim,transformAnim, nil];
         return animGroup;
     }
-    else if (style == TWZTextAnimationFade)
+    else if (style == TWZTextAnimationFadeIn)
     {
         CGFloat duration = 1.0f;
-        
-        NSNumber *fromVal = (self.hidden) ? [NSNumber numberWithFloat:1.0f] : [NSNumber numberWithFloat:0.0f];
-        NSNumber *toVal = (self.hidden) ? [NSNumber numberWithFloat:0.0f] : [NSNumber numberWithFloat:1.0f];
         
         CABasicAnimation *opacityAnim = [CABasicAnimation animationWithKeyPath:@"opacity"];
         opacityAnim.duration = duration;
         opacityAnim.fillMode=kCAFillModeBackwards;
         opacityAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-        opacityAnim.fromValue = fromVal;
-        opacityAnim.toValue = toVal;
+        opacityAnim.fromValue = [NSNumber numberWithFloat:0.0f];
+        opacityAnim.toValue = [NSNumber numberWithFloat:1.0f];
         
         CAAnimationGroup *animGroup = [CAAnimationGroup animation];
         animGroup.fillMode=kCAFillModeBackwards;
+        animGroup.removedOnCompletion = FALSE;
         animGroup.duration = duration;
         animGroup.beginTime = CACurrentMediaTime() + delay;
         animGroup.animations = [NSArray arrayWithObjects:opacityAnim, nil];
         return animGroup;
     }
-    else if (style == TWZTextAnimationDropRotate)
+    else if (style == TWZTextAnimationFadeOut)
     {
-        //                CGPoint startPos = glyphLayer.position;
-        //                int upOrDown = (i%2 == 0) ? -1 : 1;
-        //                startPos.y += 100.0f * upOrDown;
-        
-        CGFloat duration = 0.4f;
+        CGFloat duration = 0.5f;
         
         CABasicAnimation *opacityAnim = [CABasicAnimation animationWithKeyPath:@"opacity"];
         opacityAnim.duration = duration;
-        //    opacityAnim.beginTime = CACurrentMediaTime() + time;
         opacityAnim.fillMode=kCAFillModeBackwards;
         opacityAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-        opacityAnim.fromValue = [NSNumber numberWithFloat:0.0f];
-        opacityAnim.toValue = [NSNumber numberWithFloat:1.0f];
-        //    [layer addAnimation:opacityAnim forKey:@"opacity"];
-        
-        CABasicAnimation *transformAnim = [CABasicAnimation animationWithKeyPath:@"transform"];
-        transformAnim.duration = duration;
-        //    transformAnim.beginTime = CACurrentMediaTime() + time;
-        transformAnim.fillMode = kCAFillModeBackwards;
-        transformAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-        transformAnim.fromValue = [NSValue valueWithCATransform3D:CATransform3DRotate(CATransform3DTranslate(CATransform3DMakeScale(4.0f, 4.0f, 1.0f),0,-self.font.pointSize/3.0f,0), M_PI, 0, 0, 1)];
-        //    transformAnim.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeTranslation(40.0f,1.0f,1.0f)];
-        transformAnim.toValue = [NSValue valueWithCATransform3D:layer.transform];
-        transformAnim.removedOnCompletion = FALSE;
-        //    [layer addAnimation:transformAnim forKey:@"transform"];
+        opacityAnim.fromValue = [NSNumber numberWithFloat:1.0f];
+        opacityAnim.toValue = [NSNumber numberWithFloat:0.0f];
         
         CAAnimationGroup *animGroup = [CAAnimationGroup animation];
         animGroup.fillMode=kCAFillModeBackwards;
+        animGroup.removedOnCompletion = FALSE;
         animGroup.duration = duration;
         animGroup.beginTime = CACurrentMediaTime() + delay;
-        animGroup.animations = [NSArray arrayWithObjects:opacityAnim,transformAnim, nil];
+        animGroup.animations = [NSArray arrayWithObjects:opacityAnim, nil];
         return animGroup;
     }
+//    else if (style == TWZTextAnimationDropRotate)
+//    {
+//        //                CGPoint startPos = glyphLayer.position;
+//        //                int upOrDown = (i%2 == 0) ? -1 : 1;
+//        //                startPos.y += 100.0f * upOrDown;
+//        
+//        CGFloat duration = 0.4f;
+//        
+//        CABasicAnimation *opacityAnim = [CABasicAnimation animationWithKeyPath:@"opacity"];
+//        opacityAnim.duration = duration;
+//        //    opacityAnim.beginTime = CACurrentMediaTime() + time;
+//        opacityAnim.fillMode=kCAFillModeBackwards;
+//        opacityAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+//        opacityAnim.fromValue = [NSNumber numberWithFloat:0.0f];
+//        opacityAnim.toValue = [NSNumber numberWithFloat:1.0f];
+//        //    [layer addAnimation:opacityAnim forKey:@"opacity"];
+//        
+//        CABasicAnimation *transformAnim = [CABasicAnimation animationWithKeyPath:@"transform"];
+//        transformAnim.duration = duration;
+//        //    transformAnim.beginTime = CACurrentMediaTime() + time;
+//        transformAnim.fillMode = kCAFillModeBackwards;
+//        transformAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+//        transformAnim.fromValue = [NSValue valueWithCATransform3D:CATransform3DRotate(CATransform3DTranslate(CATransform3DMakeScale(4.0f, 4.0f, 1.0f),0,-self.font.pointSize/3.0f,0), M_PI, 0, 0, 1)];
+//        //    transformAnim.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeTranslation(40.0f,1.0f,1.0f)];
+//        transformAnim.toValue = [NSValue valueWithCATransform3D:layer.transform];
+//        transformAnim.removedOnCompletion = FALSE;
+//        //    [layer addAnimation:transformAnim forKey:@"transform"];
+//        
+//        CAAnimationGroup *animGroup = [CAAnimationGroup animation];
+//        animGroup.fillMode=kCAFillModeBackwards;
+//        animGroup.duration = duration;
+//        animGroup.beginTime = CACurrentMediaTime() + delay;
+//        animGroup.animations = [NSArray arrayWithObjects:opacityAnim,transformAnim, nil];
+//        return animGroup;
+//    }
     return nil;
 }
 
@@ -412,7 +444,7 @@
     [stringToDraw release];
     
     CFRange fitRange;
-    CGSize fitSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(size.width, CGFLOAT_MAX), &fitRange);
+    CGSize fitSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(size.width, size.height), &fitRange);
     
     fitSize.width = ceilf(fitSize.width);
     fitSize.height = ceilf(fitSize.height);
@@ -422,6 +454,19 @@
 
 - (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
 {
+    if ([theAnimation isKindOfClass:[CAAnimationGroup class]])
+    {
+        NSArray *animations = ((CAAnimationGroup *)theAnimation).animations;
+        for (CABasicAnimation *anim in animations)
+        {
+            if ([[anim keyPath] isEqualToString:@"opacity"] && [[anim toValue] floatValue] == 0.0f)
+            {
+                self.hidden = YES;
+                break;
+            }
+        }
+    }
+    
     if (self.completion)
     {
 //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC),dispatch_get_current_queue(), self.completion);

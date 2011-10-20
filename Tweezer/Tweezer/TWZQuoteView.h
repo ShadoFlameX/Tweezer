@@ -9,12 +9,20 @@
 #import <UIKit/UIKit.h>
 #import "TWZTextAnimationView.h"
 
+typedef enum {
+    TWZQuoteViewFontSizeSmall,
+    TWZQuoteViewFontSizeMedium,
+    TWZQuoteViewFontSizeLarge
+} TWZQuoteViewFontSize;
+
 @interface TWZQuoteView : UIView
 {
     TWZTextAnimationView *_quoteTextView;
     TWZTextAnimationView *_creditTextView;
     TWZTextAnimationView *_addInfoTextView;
 }
+
++ (CGFloat)quoteFontSize;
 
 - (void)setHidden:(BOOL)hidden animated:(BOOL)animated;
 

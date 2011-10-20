@@ -11,9 +11,11 @@
 #import "TWZStatus.h"
 #import "TWZList.h"
 #import "TWZSourcePreset.h"
+#import "NSDate+BHExtensions.h"
 
 @interface TWZQuoteBoardViewController ()
-- (void)showTweet;
+- (void)showNextQuote;
+- (void)showQuote:(TWZStatus *)status;
 @end
 
 @implementation TWZQuoteBoardViewController
@@ -126,8 +128,8 @@
     self.unshownStatuses = [NSMutableArray arrayWithArray:self.statuses];
     
     if (!self.tweetTimer) {
-        self.tweetTimer = [NSTimer scheduledTimerWithTimeInterval:8.0f target:self selector:@selector(showTweet) userInfo:nil repeats:YES];
-        [self showTweet];
+        self.tweetTimer = [NSTimer scheduledTimerWithTimeInterval:9.0f target:self selector:@selector(showNextQuote) userInfo:nil repeats:YES];
+        [self showNextQuote];
     }
 //    if (_userIndex < self.users.count - 1) {
 //        _userIndex++;
@@ -153,43 +155,56 @@
     [navCon release];
 }
 
-- (void)showTweet
+- (void)showNextQuote
 {
     if (self.unshownStatuses.count) {
         NSUInteger index = rand()%self.unshownStatuses.count;
         TWZStatus *aStatus = [self.unshownStatuses objectAtIndex:index];
         
-        [self.quoteView removeFromSuperview];
-        
-        self.quoteView = [[TWZQuoteView alloc] initWithFrame:CGRectInset(self.view.bounds, 15.0f, 10.0f)];
-        // flexbile causes a crash at the moment
-//        self.quoteView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        self.quoteView.quote = aStatus.text;
-        self.quoteView.credit = aStatus.user.screenName;
-        self.quoteView.additionalInfo = aStatus.user.name;
-        [self.quoteView sizeToFit];
-        self.quoteView.hidden = YES;
-        
-        CGRect rect = self.quoteView.frame;
-        rect.origin.x = floorf((self.view.bounds.size.width - rect.size.width)/2.0f);
-        rect.origin.y = floorf((self.view.bounds.size.height - rect.size.height)/2.0f);
-        self.quoteView.frame = rect;
-        
-        [self.view addSubview:self.quoteView];
-        [self.quoteView release];
-                
-        [self.quoteView setHidden:NO animated:YES];
+        if (self.quoteView)
+        {
+            [self.quoteView setHidden:YES animated:YES];
+            [self performSelector:@selector(showQuote:) withObject:aStatus afterDelay:1.0f];
+        }
+        else {
+            [self showQuote:aStatus];
+        }
         [self.unshownStatuses removeObjectAtIndex:index];
     }
     else if (self.statuses.count)
     {
         self.unshownStatuses = [NSMutableArray arrayWithArray:self.statuses];
-        [self showTweet];
+        [self showNextQuote];
     }
     else
     {
         [self.tweetTimer invalidate];
     }
+}
+
+- (void)showQuote:(TWZStatus *)status
+{
+    NSLog(@"%@",status.text);
+    [self.quoteView removeFromSuperview];    
+    
+    self.quoteView = [[TWZQuoteView alloc] initWithFrame:CGRectInset(self.view.bounds, floorf(self.view.bounds.size.width/16.0f), floorf(self.view.bounds.size.width/16.0f))];
+    // flexbile causes a crash at the moment
+//        self.quoteView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.quoteView.quote = status.text;
+    self.quoteView.credit = status.user.screenName;
+    self.quoteView.additionalInfo = [[NSDate date] relativeDifference:status.createdAt];
+    [self.quoteView sizeToFit];
+    self.quoteView.hidden = YES;
+    
+    CGRect rect = self.quoteView.frame;
+    rect.origin.x = floorf((self.view.bounds.size.width - rect.size.width)/2.0f);
+    rect.origin.y = floorf((self.view.bounds.size.height - rect.size.height)/2.0f);
+    self.quoteView.frame = rect;
+    
+    [self.view addSubview:self.quoteView];
+    [self.quoteView release];
+            
+    [self.quoteView setHidden:NO animated:YES];
 }
 
 

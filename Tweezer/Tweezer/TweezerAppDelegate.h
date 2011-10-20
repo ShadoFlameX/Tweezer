@@ -14,7 +14,9 @@
 
 @interface TweezerAppDelegate : UIResponder <UIApplicationDelegate>
 
-@property (strong, nonatomic) UIWindow *window;
-@property (strong, nonatomic) UINavigationController *navigationController;
+@property (nonatomic,retain) UIWindow *window;
+@property (nonatomic,retain) UIWindow *secondaryWindow;
+@property (nonatomic,retain) UINavigationController *navigationController;
+@property (nonatomic,retain) TWZQuoteBoardViewController *quoteBoardViewController;
 
 @end

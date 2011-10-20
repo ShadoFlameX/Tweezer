@@ -13,16 +13,23 @@
 #import "TWZList.h"
 #import "TWZConstants.h"
 
+@interface TweezerAppDelegate ()
+- (void)updateForDisplayChanges;
+@end
+
 @implementation TweezerAppDelegate
 
 @synthesize window = _window;
+@synthesize secondaryWindow;
 @synthesize navigationController = _navigationController;
+@synthesize quoteBoardViewController;
 
 + (void)initialize
 {
     NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
                               [NSNumber numberWithInt:0],TWZUserDefaultShuffleMode,
                               [NSNumber numberWithInt:5],TWZUserDefaultQuoteDuration,
+                              [NSNumber numberWithInt:TWZQuoteViewFontSizeSmall],TWZUserDefaultFontSize,
                               nil];
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 }
@@ -76,16 +83,47 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    TWZQuoteBoardViewController *qbVC = [[TWZQuoteBoardViewController alloc] initWithNibName:@"TWZQuoteBoardViewController" bundle:nil]; 
-    self.navigationController = [[UINavigationController alloc] initWithRootViewController:qbVC];
-
-//    TWZListsViewController *vc = [[TWZListsViewController alloc] initWithNibName:@"TWZListsViewController" bundle:nil];
-//    self.navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
-
+    self.quoteBoardViewController = [[TWZQuoteBoardViewController alloc] initWithNibName:@"TWZQuoteBoardViewController" bundle:nil];
+    self.navigationController = [[UINavigationController alloc] initWithRootViewController:self.quoteBoardViewController];
     
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
+    [self.window release];
+    [self.navigationController release];
+    [self.quoteBoardViewController release];
+    
+    if ([UIScreen screens].count > 1) [self updateForDisplayChanges];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIScreenDidConnectNotification object:nil queue:nil usingBlock:^(NSNotification *note) { [self updateForDisplayChanges]; }];
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIScreenDidDisconnectNotification object:nil queue:nil usingBlock:^(NSNotification *note) { [self updateForDisplayChanges]; }];
+
     return YES;
+}
+
+- (void)updateForDisplayChanges
+{
+    NSArray *screens = [UIScreen screens];
+    if (screens.count > 1)
+    {
+        self.navigationController.viewControllers = nil;
+        UIScreen *secondaryScreen = [screens objectAtIndex:1];
+        self.quoteBoardViewController.view.frame = secondaryScreen.bounds;
+        self.secondaryWindow = [[UIWindow alloc] initWithFrame:secondaryScreen.bounds];
+        [self.secondaryWindow addSubview:self.quoteBoardViewController.view];
+        self.secondaryWindow.hidden = NO;
+        self.secondaryWindow.screen = secondaryScreen;
+        
+//        self.window.screen = secondaryScreen;
+    }
+    else
+    {
+        self.quoteBoardViewController.view.frame = [[UIScreen mainScreen] applicationFrame];
+        [self.navigationController addChildViewController:self.quoteBoardViewController];
+        self.secondaryWindow = nil;
+        
+//        self.window.screen = [UIScreen mainScreen];
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

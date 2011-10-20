@@ -11,5 +11,6 @@
 
 #define TWZUserDefaultShuffleMode @"TWZUserDefaultShuffleMode"
 #define TWZUserDefaultQuoteDuration @"TWZUserDefaultQuoteDuration"
+#define TWZUserDefaultFontSize @"TWZUserDefaultFontSize"
 
 #endif

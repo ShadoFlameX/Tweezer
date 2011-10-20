@@ -12,8 +12,9 @@
 typedef enum
 {
     TWZTextAnimationNone,
-    TWZTextAnimationDropRotate,
-    TWZTextAnimationFade
+    TWZTextAnimationDropRotateIn,
+    TWZTextAnimationFadeIn,
+    TWZTextAnimationFadeOut
 } TWZTextAnimation;
 
 @interface TWZTextAnimationView : UIView
