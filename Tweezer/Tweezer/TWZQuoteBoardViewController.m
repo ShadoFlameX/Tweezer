@@ -11,7 +11,6 @@
 #import "TWZStatus.h"
 #import "TWZList.h"
 #import "TWZSourcePreset.h"
-#import "TWZTextAnimationView.h"
 
 @interface TWZQuoteBoardViewController ()
 - (void)showTweet;
@@ -21,9 +20,11 @@
 
 @synthesize users = _users;
 @synthesize statuses = _statuses;
+@synthesize unshownStatuses = _unshownStatuses;
 @synthesize setupContainerView = _setupContainerView;
 @synthesize statusLabel = _statusLabel;
 @synthesize tweetTimer = _tweetTimer;
+@synthesize quoteView = _quoteView;
 
 - (void)loadTweetsForUser:(TWZUser *)user
 {
@@ -40,7 +41,7 @@
 {
     RKObjectManager* objectManager = [RKObjectManager sharedManager];
     objectManager.client.baseURL = @"http://api.twitter.com";
-    [objectManager loadObjectsAtResourcePath:[NSString stringWithFormat:@"/1/lists/statuses.json?list_id=%@",list.listID] delegate:self block:^(RKObjectLoader* loader) {
+    [objectManager loadObjectsAtResourcePath:[NSString stringWithFormat:@"/1/lists/statuses.json?list_id=%@&per_page=100",list.listID] delegate:self block:^(RKObjectLoader* loader) {
         if ([objectManager.acceptMIMEType isEqualToString:RKMIMETypeJSON]) {
             loader.objectMapping = [objectManager.mappingProvider objectMappingForClass:[TWZStatus class]];
         }
@@ -90,10 +91,12 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     if ([TWZSourcePreset allPresets].count) {
+        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
         [self.navigationController setNavigationBarHidden:YES animated:animated];
         [self loadTweetsForList:((TWZSourcePreset *)[[TWZSourcePreset allPresets] objectAtIndex:0]).list];
     }
     else {
+        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
         [self.navigationController setNavigationBarHidden:NO animated:animated];
     }
 }
@@ -101,7 +104,9 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return (interfaceOrientation == UIInterfaceOrientationPortrait ||
+            interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+            interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
 
@@ -118,8 +123,10 @@
             [self.statuses addObject:aStatus];
         }
     }
+    self.unshownStatuses = [NSMutableArray arrayWithArray:self.statuses];
+    
     if (!self.tweetTimer) {
-        self.tweetTimer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(showTweet) userInfo:nil repeats:YES];
+        self.tweetTimer = [NSTimer scheduledTimerWithTimeInterval:8.0f target:self selector:@selector(showTweet) userInfo:nil repeats:YES];
         [self showTweet];
     }
 //    if (_userIndex < self.users.count - 1) {
@@ -148,25 +155,39 @@
 
 - (void)showTweet
 {
-    if (self.statuses.count) {
-//        NSUInteger index = rand()%self.statuses.count;
-//        TWZStatus *aStatus = [self.statuses objectAtIndex:index];
-//        self.statusLabel.text = aStatus.text;
+    if (self.unshownStatuses.count) {
+        NSUInteger index = rand()%self.unshownStatuses.count;
+        TWZStatus *aStatus = [self.unshownStatuses objectAtIndex:index];
         
-        TWZTextAnimationView *taView = [[TWZTextAnimationView alloc] initWithString:@"Being the richest man in the cemetery doesn't matter to me. Going to bed at night saying we've done something wonderful, that's what matters to me."];
-
-        taView.backgroundColor = [UIColor clearColor];
-        [taView sizeToFit];
+        [self.quoteView removeFromSuperview];
         
-        CGRect r = taView.frame;
-        r.origin.x = 10.0f;
-        r.origin.y = 10.0f;
-        taView.frame = r;
-        [self.view addSubview:taView];
+        self.quoteView = [[TWZQuoteView alloc] initWithFrame:CGRectInset(self.view.bounds, 15.0f, 10.0f)];
+        // flexbile causes a crash at the moment
+//        self.quoteView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.quoteView.quote = aStatus.text;
+        self.quoteView.credit = aStatus.user.screenName;
+        self.quoteView.additionalInfo = aStatus.user.name;
+        [self.quoteView sizeToFit];
+        self.quoteView.hidden = YES;
         
-        [self.tweetTimer invalidate];
+        CGRect rect = self.quoteView.frame;
+        rect.origin.x = floorf((self.view.bounds.size.width - rect.size.width)/2.0f);
+        rect.origin.y = floorf((self.view.bounds.size.height - rect.size.height)/2.0f);
+        self.quoteView.frame = rect;
+        
+        [self.view addSubview:self.quoteView];
+        [self.quoteView release];
+                
+        [self.quoteView setHidden:NO animated:YES];
+        [self.unshownStatuses removeObjectAtIndex:index];
     }
-    else {
+    else if (self.statuses.count)
+    {
+        self.unshownStatuses = [NSMutableArray arrayWithArray:self.statuses];
+        [self showTweet];
+    }
+    else
+    {
         [self.tweetTimer invalidate];
     }
 }

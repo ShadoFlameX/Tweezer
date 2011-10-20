@@ -13,6 +13,7 @@
 @synthesize font = _font;
 @synthesize fontSize = _fontSize;
 @synthesize baseline;
+@synthesize color;
 
 - (id)initWithGlyphs:(CGGlyph *)glyphs count:(size_t)count
 {
@@ -40,7 +41,8 @@
 	CGContextTranslateCTM(ctx, 0, self.bounds.size.height);
 	CGContextScaleCTM(ctx, 1.0, -1.0);
     
-    CGContextSetFillColorWithColor(ctx, [UIColor whiteColor].CGColor);
+    CGContextSetFillColorWithColor(ctx, self.color);
+//    CGContextSetFillColorWithColor(ctx, [UIColor blackColor].CGColor);
     CGContextSetFont(ctx, _font);
     CGContextSetFontSize(ctx, self.fontSize);
     

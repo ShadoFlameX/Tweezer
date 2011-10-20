@@ -14,12 +14,15 @@
 
 @interface TWZTextAnimationView ()
 - (void)setup;
-- (void)animateGlyphLayer:(TWZGlyphLayer *)layer withDelay:(CGFloat)time;
+- (CAAnimation *)animationForGlyphLayer:(TWZGlyphLayer *)layer style:(TWZTextAnimation)style delay:(CGFloat)delay;
 @end
 
 @implementation TWZTextAnimationView
 
 @synthesize text = _text;
+@synthesize textColor;
+@synthesize font;
+@synthesize completion = _completion;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -48,21 +51,33 @@
 - (void)setup
 {
     self.backgroundColor = [UIColor whiteColor];
+    self.textColor = [UIColor blackColor];
+    self.font = [UIFont systemFontOfSize:32.0f];
+
 }
 
 - (void)layoutSubviews
 {
-    // create a font, quasi systemFontWithSize:24.0
-    //	CTFontRef sysUIFont = CTFontCreateUIFontForLanguage(kCTFontEmphasizedSystemFontType, 21.0, NULL);
-    CTFontRef font = CTFontCreateWithName((CFStringRef)@"Times New Roman", 24.0f, NULL);
+//    for (CALayer *lyr in self.layer.sublayers)
+//    {
+//        if ([lyr isKindOfClass:[TWZGlyphLayer class]])
+//        {
+//            [lyr removeFromSuperlayer];
+//        }
+//    }
     
-	// blue
-	CGColorRef color = [UIColor whiteColor].CGColor;
+    if (![self.text length])
+    {
+        return;
+    }
+    
+    
+    CTFontRef ctFont = CTFontCreateWithName((CFStringRef)self.font.fontName, self.font.pointSize, NULL);
     
 	// pack it into attributes dictionary
 	NSDictionary *attributesDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    (id)font, (id)kCTFontAttributeName,
-                                    color, (id)kCTForegroundColorAttributeName,
+                                    (id)ctFont, (id)kCTFontAttributeName,
+                                    self.textColor.CGColor, (id)kCTForegroundColorAttributeName,
                                     nil];
     
 	// make the attributed string
@@ -70,6 +85,7 @@
     
     // layout master
 	CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)stringToDraw);
+    [stringToDraw release];
     
 	// column form
 	CGMutablePathRef columnPath = CGPathCreateMutable();
@@ -78,11 +94,25 @@
 	// column frame
 	_frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), columnPath, NULL);
     
+    
     NSUInteger glyphIndex = 0;
     NSUInteger runIndex = 0;;
-    CGFloat lineHeight = 0.0f;
-    for (id aLine in (NSArray *)CTFrameGetLines(_frame))
+    NSArray *lines = (NSArray *)CTFrameGetLines(_frame);
+    CGPoint *originPts = malloc(sizeof(CGPoint) * lines.count);    
+    CTFrameGetLineOrigins(_frame, CFRangeMake(0, 0), originPts);
+    int lineIndex;
+    for (lineIndex=0; lineIndex<lines.count; lineIndex++)
     {
+        CTLineRef aLine = (CTLineRef)[lines objectAtIndex:lineIndex];
+        
+        CGFloat lineAscent;
+        CGFloat lineDescent;
+        CGFloat lineLeading;
+        CTLineGetTypographicBounds((CTLineRef)aLine, &lineAscent, &lineDescent, &lineLeading);
+        
+        // need to flip y-axis then move up by height above baselined
+        CGFloat lineOrigin = floorf((self.frame.size.height - originPts[lineIndex].y) - lineAscent);
+        
         CFArrayRef runs = CTLineGetGlyphRuns((CTLineRef)aLine);
         for (id aRun in (NSArray *)runs)
         {
@@ -109,17 +139,17 @@
                 if (YES)
                 {
                     double glyphWidth = CTRunGetTypographicBounds((CTRunRef)aRun, CFRangeMake(i, 1), &ascent, &descent, &leading);
-                    
+                                        
                     CGGlyph g[1];
                     g[0] = allGlyphs[i];
                     TWZGlyphLayer *glyphLayer = [[TWZGlyphLayer alloc] initWithGlyphs:g count:1];
                     glyphLayer.font = CTFontCopyGraphicsFont(runFont, NULL);
-                    glyphLayer.fontSize = CTFontGetSize(font);
-                    glyphLayer.baseline = descent + leading;
-                    glyphLayer.frame = CGRectMake(roundf(totalWidth), lineHeight, ceilf(glyphWidth), ceilf(ascent + descent + leading));
+                    glyphLayer.fontSize = CTFontGetSize(ctFont);
+                    glyphLayer.baseline = ceilf(descent) + ceilf(leading);
+                    glyphLayer.color = self.textColor.CGColor;
+                    glyphLayer.frame = CGRectMake(roundf(totalWidth), lineOrigin, ceilf(glyphWidth), ceilf(ascent) + ceilf(descent) + ceilf(leading));
                     
                     [self.layer addSublayer:glyphLayer];
-                    [self animateGlyphLayer:glyphLayer withDelay:glyphIndex*TWZTextAnimationViewDelay];
                     [glyphLayer setNeedsDisplay];
                     [glyphLayer release];
                     
@@ -153,12 +183,11 @@
                         
                         TWZGlyphLayer *glyphLayer = [[TWZGlyphLayer alloc] initWithGlyphs:glyphChunk count:chunkCount];
                         glyphLayer.font = CTFontCopyGraphicsFont(runFont, NULL);
-                        glyphLayer.fontSize = CTFontGetSize(font);
-                        glyphLayer.baseline = descent + leading;
-                        glyphLayer.frame = CGRectMake(roundf(totalWidth), lineHeight, ceilf(chunkWidth), ceilf(ascent + descent + leading));
+                        glyphLayer.fontSize = CTFontGetSize(ctFont);
+                        glyphLayer.baseline = ceilf(descent) + ceilf(leading);
+                        glyphLayer.frame = CGRectMake(roundf(totalWidth), lineOrigin, ceilf(chunkWidth), ceilf(ascent) + ceilf(descent) + ceilf(leading));
                         
                         [self.layer addSublayer:glyphLayer];
-                        [self animateGlyphLayer:glyphLayer withDelay:glyphIndex*TWZTextAnimationViewDelay];
                         [glyphLayer setNeedsDisplay];
                         [glyphLayer release];
                         glyphIndex++;
@@ -189,12 +218,11 @@
                             
                             TWZGlyphLayer *glyphLayer = [[TWZGlyphLayer alloc] initWithGlyphs:glyphChunk count:chunkCount];
                             glyphLayer.font = CTFontCopyGraphicsFont(runFont, NULL);
-                            glyphLayer.fontSize = CTFontGetSize(font);
-                            glyphLayer.baseline = descent + leading;
-                            glyphLayer.frame = CGRectMake(roundf(totalWidth), lineHeight, ceilf(chunkWidth), ceilf(ascent + descent + leading));
+                            glyphLayer.fontSize = CTFontGetSize(ctFont);
+                            glyphLayer.baseline = ceilf(descent) + ceilf(leading);
+                            glyphLayer.frame = CGRectMake(roundf(totalWidth), lineOrigin, ceilf(chunkWidth), ceilf(ascent) + ceilf(descent) + ceilf(leading));
                             
                             [self.layer addSublayer:glyphLayer];
-                            [self animateGlyphLayer:glyphLayer withDelay:glyphIndex*TWZTextAnimationViewDelay];
                             [glyphLayer setNeedsDisplay];
                             [glyphLayer release];
                             glyphIndex++;
@@ -210,7 +238,7 @@
                 }                
             }
         }
-        lineHeight += CTFontGetAscent(font) + CTFontGetDescent(font) + CTFontGetLeading(font);
+//        lineHeight += ceilf(lineAscent + lineDescent + lineLeading);
         runIndex++;
     }
     
@@ -220,74 +248,186 @@
 	CFRelease(font);
 }
 
-- (void)animateGlyphLayer:(TWZGlyphLayer *)layer withDelay:(CGFloat)time
+//- (void)setHidden:(BOOL)hidden animation:(TWZTextAnimation)style completion:(void (^)(BOOL finished))completion
+- (void)setHidden:(BOOL)hidden animation:(TWZTextAnimation)style completion:(void (^)(void))completion
 {
-    //                CGPoint startPos = glyphLayer.position;
-    //                int upOrDown = (i%2 == 0) ? -1 : 1;
-    //                startPos.y += 100.0f * upOrDown;
+    self.hidden = hidden;
     
-    CGFloat duration = 0.4f;
-    
-    CABasicAnimation *opacityAnim = [CABasicAnimation animationWithKeyPath:@"opacity"];
-    opacityAnim.duration = duration;
-//    opacityAnim.beginTime = CACurrentMediaTime() + time;
-    opacityAnim.fillMode=kCAFillModeBackwards;
-    opacityAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-    opacityAnim.fromValue = [NSNumber numberWithFloat:0.0f];
-    opacityAnim.toValue = [NSNumber numberWithFloat:1.0f];
-//    [layer addAnimation:opacityAnim forKey:@"opacity"];
-    
-    CABasicAnimation *transformAnim = [CABasicAnimation animationWithKeyPath:@"transform"];
-    transformAnim.duration = duration;
-//    transformAnim.beginTime = CACurrentMediaTime() + time;
-    transformAnim.fillMode = kCAFillModeBackwards;
-    transformAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    transformAnim.fromValue = [NSValue valueWithCATransform3D:CATransform3DTranslate(CATransform3DMakeScale(4.0f, 4.0f, 1.0f),0,-2,0)];
-//    transformAnim.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeTranslation(40.0f,1.0f,1.0f)];
-    transformAnim.toValue = [NSValue valueWithCATransform3D:layer.transform];
-    transformAnim.removedOnCompletion = FALSE;
-//    [layer addAnimation:transformAnim forKey:@"transform"];
-
-    CAAnimationGroup *animGroup = [CAAnimationGroup animation];
-    animGroup.fillMode=kCAFillModeBackwards;
-    animGroup.duration = duration;
-    animGroup.beginTime = CACurrentMediaTime() + time;
-    animGroup.animations = [NSArray arrayWithObjects:opacityAnim,transformAnim, nil];
-    [layer addAnimation:animGroup forKey:@"show"];
-}
-
-//- (void)setText:(NSString *)string
-//{
-//    [string retain];
-//    [_text release];
-//    _text = string;
-//}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSUInteger layerIdx = 0;
-    for (CALayer *layer in [self.layer sublayers ])
+    if (style != TWZTextAnimationNone)
     {
-        if ([layer isKindOfClass:[TWZGlyphLayer class]])
+        self.completion = completion;
+        [self layoutIfNeeded];
+        CGFloat delay = 0.0f;
+        int i;
+        for (i=0; i<self.layer.sublayers.count; i++)
         {
-            [self animateGlyphLayer:(TWZGlyphLayer*)layer withDelay:layerIdx * TWZTextAnimationViewDelay];
-            layerIdx++;
+            CALayer *lyr = [self.layer.sublayers objectAtIndex:i];
+            if ([lyr isKindOfClass:[TWZGlyphLayer class]])
+            {
+                CAAnimation *anim = [self animationForGlyphLayer:(TWZGlyphLayer *)lyr style:style delay:delay];
+                if (i == self.layer.sublayers.count - 1)
+                {
+                    anim.delegate = self;
+                }
+                [lyr addAnimation:anim forKey:@"ShowHide"];
+                if (style == TWZTextAnimationDropRotate) delay += TWZTextAnimationViewDelay;
+            }
         }
     }
 }
 
-- (void)drawRect:(CGRect)rect
+- (CAAnimation *)animationForGlyphLayer:(TWZGlyphLayer *)layer style:(TWZTextAnimation)style delay:(CGFloat)delay
 {
-    // flip the coordinate system
+    if (style == TWZTextAnimationDropRotate)
+    {
+        if (self.hidden)
+        {
+            // hiding is not supported for TWZTextAnimationStyleDropRotate
+            return [self animationForGlyphLayer:layer style:TWZTextAnimationFade delay:0];
+        }
+        CGFloat duration = 0.4f;
+        
+        CABasicAnimation *opacityAnim = [CABasicAnimation animationWithKeyPath:@"opacity"];
+        opacityAnim.duration = duration;
+        opacityAnim.fillMode=kCAFillModeBackwards;
+        opacityAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+        opacityAnim.fromValue = [NSNumber numberWithFloat:0.0f];
+        opacityAnim.toValue = [NSNumber numberWithFloat:1.0f];
+        
+        CABasicAnimation *transformAnim = [CABasicAnimation animationWithKeyPath:@"transform"];
+        transformAnim.duration = duration;
+        transformAnim.fillMode = kCAFillModeBackwards;
+        transformAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        transformAnim.fromValue = [NSValue valueWithCATransform3D:CATransform3DRotate(CATransform3DTranslate(CATransform3DMakeScale(4.0f, 4.0f, 1.0f),0,-self.font.pointSize/3.0f,0), M_PI, 0, 0, 1)];
+        transformAnim.toValue = [NSValue valueWithCATransform3D:layer.transform];
+        transformAnim.removedOnCompletion = FALSE;
+        
+        CAAnimationGroup *animGroup = [CAAnimationGroup animation];
+        animGroup.fillMode=kCAFillModeBackwards;
+        animGroup.duration = duration;
+        animGroup.beginTime = CACurrentMediaTime() + delay;
+        animGroup.animations = [NSArray arrayWithObjects:opacityAnim,transformAnim, nil];
+        return animGroup;
+    }
+    else if (style == TWZTextAnimationFade)
+    {
+        CGFloat duration = 1.0f;
+        
+        NSNumber *fromVal = (self.hidden) ? [NSNumber numberWithFloat:1.0f] : [NSNumber numberWithFloat:0.0f];
+        NSNumber *toVal = (self.hidden) ? [NSNumber numberWithFloat:0.0f] : [NSNumber numberWithFloat:1.0f];
+        
+        CABasicAnimation *opacityAnim = [CABasicAnimation animationWithKeyPath:@"opacity"];
+        opacityAnim.duration = duration;
+        opacityAnim.fillMode=kCAFillModeBackwards;
+        opacityAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+        opacityAnim.fromValue = fromVal;
+        opacityAnim.toValue = toVal;
+        
+        CAAnimationGroup *animGroup = [CAAnimationGroup animation];
+        animGroup.fillMode=kCAFillModeBackwards;
+        animGroup.duration = duration;
+        animGroup.beginTime = CACurrentMediaTime() + delay;
+        animGroup.animations = [NSArray arrayWithObjects:opacityAnim, nil];
+        return animGroup;
+    }
+    else if (style == TWZTextAnimationDropRotate)
+    {
+        //                CGPoint startPos = glyphLayer.position;
+        //                int upOrDown = (i%2 == 0) ? -1 : 1;
+        //                startPos.y += 100.0f * upOrDown;
+        
+        CGFloat duration = 0.4f;
+        
+        CABasicAnimation *opacityAnim = [CABasicAnimation animationWithKeyPath:@"opacity"];
+        opacityAnim.duration = duration;
+        //    opacityAnim.beginTime = CACurrentMediaTime() + time;
+        opacityAnim.fillMode=kCAFillModeBackwards;
+        opacityAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+        opacityAnim.fromValue = [NSNumber numberWithFloat:0.0f];
+        opacityAnim.toValue = [NSNumber numberWithFloat:1.0f];
+        //    [layer addAnimation:opacityAnim forKey:@"opacity"];
+        
+        CABasicAnimation *transformAnim = [CABasicAnimation animationWithKeyPath:@"transform"];
+        transformAnim.duration = duration;
+        //    transformAnim.beginTime = CACurrentMediaTime() + time;
+        transformAnim.fillMode = kCAFillModeBackwards;
+        transformAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        transformAnim.fromValue = [NSValue valueWithCATransform3D:CATransform3DRotate(CATransform3DTranslate(CATransform3DMakeScale(4.0f, 4.0f, 1.0f),0,-self.font.pointSize/3.0f,0), M_PI, 0, 0, 1)];
+        //    transformAnim.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeTranslation(40.0f,1.0f,1.0f)];
+        transformAnim.toValue = [NSValue valueWithCATransform3D:layer.transform];
+        transformAnim.removedOnCompletion = FALSE;
+        //    [layer addAnimation:transformAnim forKey:@"transform"];
+        
+        CAAnimationGroup *animGroup = [CAAnimationGroup animation];
+        animGroup.fillMode=kCAFillModeBackwards;
+        animGroup.duration = duration;
+        animGroup.beginTime = CACurrentMediaTime() + delay;
+        animGroup.animations = [NSArray arrayWithObjects:opacityAnim,transformAnim, nil];
+        return animGroup;
+    }
+    return nil;
+}
+
+//- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+//    NSUInteger layerIdx = 0;
+//    for (CALayer *layer in [self.layer sublayers ])
+//    {
+//        if ([layer isKindOfClass:[TWZGlyphLayer class]])
+//        {
+//            [self animateGlyphLayer:(TWZGlyphLayer*)layer withDelay:layerIdx * TWZTextAnimationViewDelay];
+//            layerIdx++;
+//        }
+//    }
+//}
+
+//- (void)drawRect:(CGRect)rect
+//{
+//    [super drawRect:rect];
+//    // flip the coordinate system
 //	CGContextRef context = UIGraphicsGetCurrentContext();
 //	CGContextSetTextMatrix(context, CGAffineTransformIdentity);
 //	CGContextTranslateCTM(context, 0, self.bounds.size.height);
 //	CGContextScaleCTM(context, 1.0, -1.0);
 //	// draw
 //	CTFrameDraw(_frame, context);    
+//}
+
+- (CGSize)sizeThatFits:(CGSize)size
+{
+    if (![self.text length])
+    {
+        return CGSizeZero;
+    }
+    
+    CTFontRef ctFont = CTFontCreateWithName((CFStringRef)self.font.fontName, self.font.pointSize, NULL);
+    
+	// pack it into attributes dictionary
+	NSDictionary *attributesDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    (id)ctFont, (id)kCTFontAttributeName,
+                                    self.textColor.CGColor, (id)kCTForegroundColorAttributeName,
+                                    nil];
+    
+    NSAttributedString *stringToDraw = [[NSAttributedString alloc] initWithString:self.text attributes:attributesDict];
+	CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)stringToDraw);
+    [stringToDraw release];
+    
+    CFRange fitRange;
+    CGSize fitSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(size.width, CGFLOAT_MAX), &fitRange);
+    
+    fitSize.width = ceilf(fitSize.width);
+    fitSize.height = ceilf(fitSize.height);
+    
+    return fitSize;
 }
 
-- (void)sizeToFit {
-    self.bounds = CGRectMake(0.0f, 0.0f, 300.0f, 440.0f);
+- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
+{
+    if (self.completion)
+    {
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC),dispatch_get_current_queue(), self.completion);
+        dispatch_async(dispatch_get_current_queue(), self.completion);
+        self.completion = NULL;
+    }
 }
 
 @end

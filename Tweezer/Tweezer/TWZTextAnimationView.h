@@ -9,14 +9,27 @@
 #import <UIKit/UIKit.h>
 #import <CoreText/CoreText.h>
 
+typedef enum
+{
+    TWZTextAnimationNone,
+    TWZTextAnimationDropRotate,
+    TWZTextAnimationFade
+} TWZTextAnimation;
+
 @interface TWZTextAnimationView : UIView
 {
     NSString *_text;
     CTFrameRef _frame;
+    void (^_completion)(void);
 }
 
 - (id)initWithString:(NSString *)string;
 
+- (void)setHidden:(BOOL)hidden animation:(TWZTextAnimation)style completion:(void (^)(void))completion;
+
 @property (nonatomic,retain) NSString *text;
+@property (nonatomic,retain) UIColor *textColor;
+@property (nonatomic,retain) UIFont *font;
+@property (nonatomic,copy) void (^completion)(void);
 
 @end

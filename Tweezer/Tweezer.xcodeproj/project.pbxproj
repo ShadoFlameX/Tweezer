@@ -51,6 +51,7 @@
 		0DC178BD143FEFCC002CD4C3 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DC178BA143FEFCC002CD4C3 /* CFNetwork.framework */; };
 		0DC178BE143FEFCC002CD4C3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DC178BB143FEFCC002CD4C3 /* MobileCoreServices.framework */; };
 		0DC178BF143FEFCC002CD4C3 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DC178BC143FEFCC002CD4C3 /* SystemConfiguration.framework */; };
+		0DC6F843144F9AC0000D1B85 /* TWZQuoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DC6F842144F9AC0000D1B85 /* TWZQuoteView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -209,6 +210,8 @@
 		0DC178BA143FEFCC002CD4C3 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		0DC178BB143FEFCC002CD4C3 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		0DC178BC143FEFCC002CD4C3 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		0DC6F841144F9AC0000D1B85 /* TWZQuoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWZQuoteView.h; sourceTree = "<group>"; };
+		0DC6F842144F9AC0000D1B85 /* TWZQuoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWZQuoteView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -311,6 +314,8 @@
 				0D0F5D25144773490081E352 /* TWZTextAnimationView.m */,
 				0D0F5D2C1447AC100081E352 /* TWZGlyphLayer.h */,
 				0D0F5D2D1447AC100081E352 /* TWZGlyphLayer.m */,
+				0DC6F841144F9AC0000D1B85 /* TWZQuoteView.h */,
+				0DC6F842144F9AC0000D1B85 /* TWZQuoteView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -668,6 +673,7 @@
 				0DA401611446212A008F3DA6 /* UIColor+BHExtensions.m in Sources */,
 				0D0F5D26144773490081E352 /* TWZTextAnimationView.m in Sources */,
 				0D0F5D2E1447AC100081E352 /* TWZGlyphLayer.m in Sources */,
+				0DC6F843144F9AC0000D1B85 /* TWZQuoteView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

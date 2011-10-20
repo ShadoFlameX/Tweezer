@@ -21,5 +21,6 @@
 @property(nonatomic,assign) CGFontRef font;
 @property(nonatomic,assign) CGFloat fontSize;
 @property(nonatomic,assign) CGFloat baseline;
+@property(nonatomic,assign) CGColorRef color;
 
 @end
