@@ -110,19 +110,17 @@
         UIScreen *secondaryScreen = [screens objectAtIndex:1];
         self.quoteBoardViewController.view.frame = secondaryScreen.bounds;
         self.secondaryWindow = [[UIWindow alloc] initWithFrame:secondaryScreen.bounds];
+        [self.secondaryWindow release];
         [self.secondaryWindow addSubview:self.quoteBoardViewController.view];
         self.secondaryWindow.hidden = NO;
         self.secondaryWindow.screen = secondaryScreen;
-        
-//        self.window.screen = secondaryScreen;
     }
     else
     {
         self.quoteBoardViewController.view.frame = [[UIScreen mainScreen] applicationFrame];
-        [self.navigationController addChildViewController:self.quoteBoardViewController];
+        self.navigationController.viewControllers = [NSArray arrayWithObject:self.quoteBoardViewController];
+        self.window.screen = [UIScreen mainScreen];
         self.secondaryWindow = nil;
-        
-//        self.window.screen = [UIScreen mainScreen];
     }
 }
 
