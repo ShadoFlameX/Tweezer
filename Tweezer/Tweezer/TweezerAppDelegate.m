@@ -29,7 +29,7 @@
     NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
                               [NSNumber numberWithInt:0],TWZUserDefaultShuffleMode,
                               [NSNumber numberWithInt:5],TWZUserDefaultQuoteDuration,
-                              [NSNumber numberWithInt:TWZQuoteViewFontSizeSmall],TWZUserDefaultFontSize,
+                              [NSNumber numberWithInt:TWZQuoteViewFontSizeMedium],TWZUserDefaultFontSize,
                               nil];
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 }

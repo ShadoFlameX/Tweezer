@@ -60,6 +60,7 @@
         _quoteTextView = [[TWZTextAnimationView alloc] initWithFrame:CGRectZero];
         _quoteTextView.font = [UIFont systemFontOfSize:[TWZQuoteView quoteFontSize]];
         _quoteTextView.textColor = [UIColor whiteColor];
+        _quoteTextView.textShadowColor = [UIColor colorWithWhite:0.0f alpha:1.0f];
         _quoteTextView.backgroundColor = [UIColor clearColor];
 
         _creditTextView = [[TWZTextAnimationView alloc] initWithFrame:CGRectZero];

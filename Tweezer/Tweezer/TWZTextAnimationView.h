@@ -30,6 +30,7 @@ typedef enum
 
 @property (nonatomic,retain) NSString *text;
 @property (nonatomic,retain) UIColor *textColor;
+@property (nonatomic,retain) UIColor *textShadowColor;
 @property (nonatomic,retain) UIFont *font;
 @property (nonatomic,copy) void (^completion)(void);
 

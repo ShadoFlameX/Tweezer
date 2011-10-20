@@ -14,6 +14,7 @@
 @synthesize fontSize = _fontSize;
 @synthesize baseline;
 @synthesize color;
+@synthesize textShadowColor;
 
 - (id)initWithGlyphs:(CGGlyph *)glyphs count:(size_t)count
 {
@@ -35,18 +36,23 @@
 }
 
 - (void)drawInContext:(CGContextRef)ctx
-{        
+{   
     // flip the coordinate system
 	CGContextSetTextMatrix(ctx, CGAffineTransformIdentity);
 	CGContextTranslateCTM(ctx, 0, self.bounds.size.height);
 	CGContextScaleCTM(ctx, 1.0, -1.0);
     
-    CGContextSetFillColorWithColor(ctx, self.color);
-//    CGContextSetFillColorWithColor(ctx, [UIColor blackColor].CGColor);
     CGContextSetFont(ctx, _font);
     CGContextSetFontSize(ctx, self.fontSize);
     
+    if (textShadowColor)
+    {
+        CGContextSetFillColorWithColor(ctx, self.textShadowColor);
+        CGContextShowGlyphsAtPoint(ctx, 0.0f, self.baseline - 1.0f, _glyphs, _count);
+    }
+    CGContextSetFillColorWithColor(ctx, self.color);
     CGContextShowGlyphsAtPoint(ctx, 0.0f, self.baseline, _glyphs, _count);
+
 }
 
 @end

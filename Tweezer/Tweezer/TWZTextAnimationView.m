@@ -21,6 +21,7 @@
 
 @synthesize text = _text;
 @synthesize textColor;
+@synthesize textShadowColor;
 @synthesize font;
 @synthesize completion = _completion;
 
@@ -146,6 +147,7 @@
                     glyphLayer.fontSize = CTFontGetSize(ctFont);
                     glyphLayer.baseline = ceilf(descent) + ceilf(leading);
                     glyphLayer.color = self.textColor.CGColor;
+                    glyphLayer.textShadowColor = self.textShadowColor.CGColor;
                     glyphLayer.frame = CGRectMake(roundf(totalWidth), lineOrigin, ceilf(glyphWidth), ceilf(ascent) + ceilf(descent) + ceilf(leading));
                     
                     [self.layer addSublayer:glyphLayer];
@@ -353,9 +355,11 @@
         opacityAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
         opacityAnim.fromValue = [NSNumber numberWithFloat:1.0f];
         opacityAnim.toValue = [NSNumber numberWithFloat:0.0f];
+        opacityAnim.fillMode=kCAFillModeForwards;
+        opacityAnim.removedOnCompletion = FALSE;
         
         CAAnimationGroup *animGroup = [CAAnimationGroup animation];
-        animGroup.fillMode=kCAFillModeBackwards;
+        animGroup.fillMode=kCAFillModeForwards;
         animGroup.removedOnCompletion = FALSE;
         animGroup.duration = duration;
         animGroup.beginTime = CACurrentMediaTime() + delay;
